@@ -5,7 +5,7 @@ const app         = express()
 const path        = require("path");
 const isOnline    = require('is-online');
 
-app.use(express.static('../public'));
+app.use(express.static('../Public'));
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/../Views/player.html'));
