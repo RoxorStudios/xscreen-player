@@ -1,3 +1,6 @@
+//Ping interval
+var pingTimeOut;
+
 //Vue instance
 var player = new Vue({
     el: '#player',
@@ -55,11 +58,21 @@ var player = new Vue({
                 $('#loading').fadeOut('fast');
             }, 10);
         },
+        hideScreen: function() {
+            $('#loading').show();
+        },
         goOnline: function (event) {
             this.loadScreen();
         },
         goOffline: function (event) {
             $('#offline').fadeIn('fast');
+        },
+        reloadScreen: function () {
+            location.reload();
+        },
+        ping: function() {
+            clearTimeout(pingTimeOut);
+            pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
         },
     }
 });
