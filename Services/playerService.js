@@ -8,7 +8,7 @@ const isOnline    = require('is-online');
 app.use(express.static('../public'));
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+'/../views/player.html'));
+    res.sendFile(path.join(__dirname+'/../Views/player.html'));
 })
 
 app.get('/config', function (req, res) {
