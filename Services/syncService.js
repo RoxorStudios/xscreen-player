@@ -32,6 +32,8 @@ function sync() {
         if(response.statusType == 2 && isJson(response.body)) {
             media = JSON.parse(response.body);
             downloadMedia(media);
+        } else {
+            restartSync();
         }
     });
 }

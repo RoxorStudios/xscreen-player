@@ -5,7 +5,9 @@
     "append": true,
     "watch": true,
     "script": "playerService.js",
-    "sourceDir": "/var/xscreen-player/Services"
+    "sourceDir": "/var/xscreen-player/Services",
+    "minUptime" : 5000,
+    "spinSleepTime": 1000,
   },
   {
     //Sync Service
@@ -13,6 +15,8 @@
     "append": true,
     "watch": true,
     "script": "syncService.js",
-    "sourceDir": "/var/xscreen-player/Services"
+    "sourceDir": "/var/xscreen-player/Services",
+    "minUptime" : 5000,
+    "spinSleepTime": 1000,
   }
 ]
