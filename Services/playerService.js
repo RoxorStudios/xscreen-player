@@ -1,9 +1,9 @@
 require('dotenv').config();
 
-const express     = require('express')
-const app         = express()
-const path        = require("path");
-const isOnline    = require('is-online');
+const express       = require('express')
+const app           = express()
+const path          = require("path");
+const isOnline      = require('is-online');
 
 app.use(express.static('../Public'));
 
