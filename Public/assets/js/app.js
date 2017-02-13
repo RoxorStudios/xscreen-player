@@ -22,11 +22,15 @@ var player = new Vue({
             online: true,
         },
         config: null,
+        printable: null,
+        count: null,
+        counter: null
     },
     methods: {
         init: function() {
             this.fetchConfig();
             this.fetchStatus();
+            window.addEventListener('keyup', this.setCounter);
             setInterval(function(){
                 player.fetchStatus();
             }, 5000);
@@ -37,6 +41,9 @@ var player = new Vue({
             },'json')
             .done(function(config) {
                 player.config = config;
+                player.printable = player.config.print;
+                player.count = player.config.count;
+                player.counter = player.config.counter;
                 player.loadScreen();
             })
             .fail(function() {
@@ -64,6 +71,13 @@ var player = new Vue({
             $('#loading').show();
             $('#offline').hide();
             document.domain = this.config.domain;
+
+            if(this.config.print)
+            {
+
+                //$('#view').css('height', '30px');
+            }
+
             $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + '?cdn=' + this.config.contentPath);
         },
         showScreen: function() {
@@ -87,6 +101,41 @@ var player = new Vue({
             clearTimeout(pingTimeOut);
             pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
         },
+        print: function() {
+            if(this.printable) {
+                $.get( "/print",function() {
+
+                },'json')
+                .done(function(data) {
+                })
+                .fail(function() {
+                    console.log('print configuration error');
+                })
+            }
+        },
+        setCounter: function(e) {
+            if(this.count) {
+                switch (e.keyCode) {
+                    case 33:
+                        var counter = this.counter -1;
+                        break;
+                    case 34:
+                        var counter = this.counter +1;
+                        break;
+                }
+                if(typeof counter !== 'undefined'){
+                    $.get( "/setcounter", {counter: counter}, function() {
+
+                    },'json')
+                    .done(function(data) {
+                        player.counter = data.counter;
+                    })
+                    .fail(function() {
+                        console.log('configuration error');
+                    })
+                }
+            }
+        }
     }
 });
 

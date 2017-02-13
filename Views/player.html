@@ -22,8 +22,12 @@
                 <img id="logo" src="/assets/images/logo.png">
             </div>
         </div>
+        <div id="count-container" v-if="count"><p>{{ counter }}</p></div>
+        <div id="print-container" v-on:click="print" v-if="printable"><p>Print</p></div>
     </div>
+
     <iframe id="view" scrolling="no"></iframe>
+
     <script src="/assets/js/app.js?v=0.0.1"></script>
 </body>
 </html>

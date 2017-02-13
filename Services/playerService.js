@@ -4,6 +4,14 @@ const express       = require('express')
 const app           = express()
 const path          = require("path");
 const isOnline      = require('is-online');
+const escpos        = require('escpos');
+
+var counter         = 0;
+
+if(process.env.PRINT) {
+    const device  = new escpos.Network(process.env.PRINT);
+    const printer = new escpos.Printer(device);
+}
 
 app.use(express.static('../Public'));
 
@@ -12,12 +20,17 @@ app.get('/', function (req, res) {
 })
 
 app.get('/config', function (req, res) {
+    var printable = process.env.PRINT && !process.env.COUNT ? 1 : 0;
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
         domain: process.env.DOMAIN,
         live: process.env.LIVE,
         contentPath: process.env.CONTENT_PATH,
         displayKey : process.env.DISPLAY_KEY,
+        print:  printable,
+        counter: counter,
+        count: process.env.COUNT,
+        website: process.env.WEBSITE
     }));
 })
 
@@ -37,3 +50,54 @@ app.get('/status', function (req, res) {
 app.listen(process.env.PORT, function () {
     //Server started
 })
+
+app.get('/setcounter', function (req, res, data) {
+    newCounter = typeof req.query.counter !== 'undefined' ? parseInt(req.query.counter) : counter;
+    counter = newCounter < 0 ? 100 : (newCounter > 100 ? 0 : newCounter);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+        counter : counter
+    }));
+
+});
+
+app.get('/print', function (req, res) {
+    var printable = process.env.PRINT && !process.env.COUNT ? 1 : 0;
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+        print : printable
+    }));
+
+    if(printable) {
+        print(counter);
+        counter ++;
+        counter = counter > 100 ? 0 : counter;
+        return true;
+    }
+    return false;
+})
+
+function print(count) {
+    const device  = new escpos.Network(process.env.PRINT);
+    const printer = new escpos.Printer(device);
+
+    var image = escpos.Image.load(__dirname+'/../Public/client/logo.jpg', function(image){
+        device.open(function(){
+          printer
+          .font('C')
+          .align('ct')
+          .image(image, 'd24')
+          .feed(2)
+          .style('B')
+          .size(2, 2)
+          .text(count)
+          .feed(2)
+          .size(1, 1)
+          .text(process.env.WEBSITE)
+          .feed(2)
+          .cut('partial')
+          .close();
+      });
+    });
+}
