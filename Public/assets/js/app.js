@@ -23,6 +23,7 @@ var player = new Vue({
         },
         config: null,
         printable: null,
+        printing: false,
         count: null,
         counter: null
     },
@@ -102,13 +103,24 @@ var player = new Vue({
             pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
         },
         print: function() {
-            if(this.printable) {
+            if(this.printable && !this.printing) {
+                this.printing = true;
+                $('.print-hand').removeClass('show');
+                $('.print-message').html('Even geduld a.u.b.');
                 $.get( "/print",function() {
 
                 },'json')
                 .done(function(data) {
+                    player.printing = false;
+                    $('.print-message').html('Je hebt nummer ' + data.counter);
+                    var timeout = setTimeout(function(){
+                        clearTimeout(timeout);
+                        $('.print-message').html('Druk hier voor je volgnummer');
+                    }, 3000);
                 })
                 .fail(function() {
+                    player.printing = false;
+                    $('.print-message').html('Druk hier voor je volgnummer');
                     console.log('print configuration error');
                 })
             }
@@ -142,3 +154,8 @@ var player = new Vue({
 $(window).on('load',function(e){
     player.init();
 });
+
+var handInterval;
+handInterval = setInterval(function(){
+    $('.print-hand').toggleClass('show');
+}, 3000);

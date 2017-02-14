@@ -63,41 +63,53 @@ app.get('/setcounter', function (req, res, data) {
 });
 
 app.get('/print', function (req, res) {
+
     var printable = process.env.PRINT && !process.env.COUNT ? 1 : 0;
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-        print : printable
-    }));
+
+    counter++;
+    counter = counter > 100 ? 1 : counter;
 
     if(printable) {
         print(counter);
-        counter ++;
-        counter = counter > 100 ? 0 : counter;
-        return true;
     }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+        counter: counter
+    }));
+
     return false;
 })
 
 function print(count) {
+
     const device  = new escpos.Network(process.env.PRINT);
     const printer = new escpos.Printer(device);
 
-    var image = escpos.Image.load(__dirname+'/../Public/client/logo.jpg', function(image){
-        device.open(function(){
-          printer
-          .font('C')
-          .align('ct')
-          .image(image, 'd24')
-          .feed(2)
-          .style('B')
-          .size(2, 2)
-          .text(count)
-          .feed(2)
-          .size(1, 1)
-          .text(process.env.WEBSITE)
-          .feed(2)
-          .cut('partial')
-          .close();
-      });
+    var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
+
+        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+count+'.png', function(number){
+            device.open(function(){
+              printer
+              .align('ct')
+              .image(logo, 'd24')
+              .feed(1)
+              .image(number, 'd24')
+              .feed(1)
+              .text(getTicketMessage())
+              .feed(2)
+              .cut('partial')
+              .close();
+              });
+        });
     });
+}
+
+function getTicketMessage() {
+    var message = "";
+    if(process.env.TICKET_MESSAGE) {
+        message = process.env.TICKET_MESSAGE;
+    }
+    message = message.split("\\n");
+    return message.join("\n");
 }

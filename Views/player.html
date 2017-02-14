@@ -6,6 +6,7 @@
   <title>XS</title>
   <meta name="author" content="Roxor Studios">
   <link rel="stylesheet" href="/assets/css/app.css?v=0.0.1">
+  <link rel="stylesheet" href="/client/style.css">
 </head>
 
 <body>
@@ -23,7 +24,11 @@
             </div>
         </div>
         <div id="count-container" v-if="count"><p>{{ counter }}</p></div>
-        <div id="print-container" v-on:click="print" v-if="printable"><p>Print</p></div>
+        <div id="print-container" class="noselect" v-on:click="print" v-if="printable">
+            <img class="print-logo noselect" src="/client/logo_print.png">
+            <img class="print-hand noselect" src="/assets/images/hand.png">
+            <p class="print-message noselect">Druk hier voor je volgnummer</p>
+        </div>
     </div>
 
     <iframe id="view" scrolling="no"></iframe>
