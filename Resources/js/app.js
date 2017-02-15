@@ -14,7 +14,7 @@ var player = new Vue({
         printable: null,
         printing: false,
         count: null,
-        counter: null
+        counter: 1
     },
     methods: {
         init: function() {
@@ -111,10 +111,10 @@ var player = new Vue({
             if(this.count) {
                 switch (e.keyCode) {
                     case 33:
-                        var counter = this.counter -1;
+                        var counter = this.counter - 1;
                         break;
                     case 34:
-                        var counter = this.counter +1;
+                        var counter = this.counter + 1;
                         break;
                 }
                 if(typeof counter !== 'undefined'){
