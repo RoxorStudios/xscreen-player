@@ -1,4 +1,8 @@
-//Ping interval
+//Socket
+
+var socket = null;
+
+//Timeouts
 var pingTimeOut;
 var overlayTimeout;
 
@@ -31,10 +35,21 @@ var player = new Vue({
 
             },'json')
             .done(function(config) {
+
                 player.config = config;
                 player.printable = player.config.print;
                 player.count = player.config.count;
                 player.counter = player.config.counter;
+
+                if(typeof io !== 'undefined'){
+                    socket = io(player.config.socket);
+
+                    socket.on('setcounter', function (count) {
+                        player.updateCounter(count);
+                    });
+
+                }
+
                 player.loadScreen();
             })
             .fail(function() {
@@ -81,6 +96,11 @@ var player = new Vue({
         reloadScreen: function () {
             location.reload();
         },
+        socketEmit: function(method,data) {
+            if(socket){
+                socket.emit(method,data);
+            }
+        },
         ping: function() {
             clearTimeout(pingTimeOut);
             pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
@@ -110,32 +130,34 @@ var player = new Vue({
         },
         setCounter: function(e) {
             clearTimeout(overlayTimeout);
-            if(this.count) {
-                switch (e.keyCode) {
-                    case 33:
-                        var counter = this.counter - 1;
-                        break;
-                    case 34:
-                        var counter = this.counter + 1;
-                        break;
-                }
-                if(typeof counter !== 'undefined'){
-                    $.get( "/setcounter", {counter: counter}, function() {
-
-                    },'json')
-                    .done(function(data) {
-                        player.counter = data.counter;
-                        $('#count-overlay').show();
-                        overlayTimeout = setTimeout(function(){
-                            $('#count-overlay').fadeOut('fast');
-                        },3000);
-                        createjs.Sound.play("counterSound");
-                    })
-                    .fail(function() {
-                        console.log('configuration error');
-                    })
-                }
+            switch (e.keyCode) {
+                case 33:
+                    var counter = this.counter - 1;
+                    break;
+                case 34:
+                    var counter = this.counter + 1;
+                    break;
             }
+            if(typeof counter !== 'undefined'){
+                $.get( "/setcounter", {counter: counter}, function() {
+
+                },'json')
+                .done(function(data) {
+                    player.socketEmit('counter',data.counter);
+                    player.updateCounter(data.counter);
+                })
+                .fail(function() {
+                    console.log('configuration error');
+                })
+            }
+        },
+        updateCounter: function(count) {
+            player.counter = count;
+            $('#count-overlay').show();
+            overlayTimeout = setTimeout(function(){
+                $('#count-overlay').fadeOut('fast');
+            },3000);
+            createjs.Sound.play("counterSound");
         }
     }
 });

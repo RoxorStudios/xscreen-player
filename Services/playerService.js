@@ -30,7 +30,8 @@ app.get('/config', function (req, res) {
         print:  printable,
         counter: counter,
         count: process.env.COUNT,
-        website: process.env.WEBSITE
+        website: process.env.WEBSITE,
+        socket: process.env.SOCKET
     }));
 })
 
@@ -52,6 +53,7 @@ app.listen(process.env.PORT, function () {
 })
 
 app.get('/setcounter', function (req, res, data) {
+
     newCounter = typeof req.query.counter !== 'undefined' ? parseInt(req.query.counter) : counter;
     counter = newCounter <= 0 ? 99 : (newCounter >= 100 ? 1 : newCounter);
 
