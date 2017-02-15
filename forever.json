@@ -22,5 +22,13 @@
         "sourceDir": "/var/xscreen-player/Services",
         "minUptime" : 5000,
         "spinSleepTime": 1000
+    },
+    {
+        "append": true,
+        "watch": true,
+        "script": "homeService.js",
+        "sourceDir": "/var/xscreen-player/Services",
+        "minUptime" : 5000,
+        "spinSleepTime": 1000
     }
 ]
