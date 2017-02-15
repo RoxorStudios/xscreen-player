@@ -35,6 +35,23 @@ body, html {
         display: none;
     }
 
+    #count-overlay {
+        display: none;
+        z-index: 30;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        text-align: center;
+    }
+
+    #counter-overlay-number {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
     .vertical {
         position: relative;
         top: 50%;

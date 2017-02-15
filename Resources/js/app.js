@@ -1,5 +1,6 @@
 //Ping interval
 var pingTimeOut;
+var overlayTimeout;
 
 createjs.Sound.registerSound("/assets/sounds/bling.mp3", "counterSound");
 
@@ -108,6 +109,7 @@ var player = new Vue({
             }
         },
         setCounter: function(e) {
+            clearTimeout(overlayTimeout);
             if(this.count) {
                 switch (e.keyCode) {
                     case 33:
@@ -123,6 +125,10 @@ var player = new Vue({
                     },'json')
                     .done(function(data) {
                         player.counter = data.counter;
+                        $('#count-overlay').show();
+                        overlayTimeout = setTimeout(function(){
+                            $('#count-overlay').fadeOut('fast');
+                        },3000);
                         createjs.Sound.play("counterSound");
                     })
                     .fail(function() {
