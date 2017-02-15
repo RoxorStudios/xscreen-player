@@ -1,7 +1,7 @@
 //Ping interval
 var pingTimeOut;
 
-createjs.Sound.registerSound("/assets/sounds/bling.wav", "counterSound");
+createjs.Sound.registerSound("/assets/sounds/bling.mp3", "counterSound");
 
 //Vue instance
 var player = new Vue({

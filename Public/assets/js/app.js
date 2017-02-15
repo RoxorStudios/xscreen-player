@@ -32,7 +32,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
 //Ping interval
 var pingTimeOut;
 
-createjs.Sound.registerSound("/assets/sounds/bling.wav", "counterSound");
+createjs.Sound.registerSound("/assets/sounds/bling.mp3", "counterSound");
 
 //Vue instance
 var player = new Vue({

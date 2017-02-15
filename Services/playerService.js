@@ -53,7 +53,7 @@ app.listen(process.env.PORT, function () {
 
 app.get('/setcounter', function (req, res, data) {
     newCounter = typeof req.query.counter !== 'undefined' ? parseInt(req.query.counter) : counter;
-    counter = newCounter < 0 ? 100 : (newCounter > 100 ? 0 : newCounter);
+    counter = newCounter < 0 ? 100 : (newCounter > 100 ? 1 : newCounter);
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
