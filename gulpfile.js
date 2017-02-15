@@ -17,6 +17,7 @@ gulp.task('scripts', function() {
 	return gulp.src([
 		'./node_modules/jquery/dist/jquery.min.js',
 		'./node_modules/vue/dist/vue.min.js',
+		'./resources/js/soundjs-0.6.2.min.js',
 		'./resources/js/app.js',
 	])
 	.pipe(concat('app.js'))

@@ -1,6 +1,8 @@
 //Ping interval
 var pingTimeOut;
 
+createjs.Sound.registerSound("/assets/sounds/bling.wav", "counterSound");
+
 //Vue instance
 var player = new Vue({
     el: '#player',
@@ -59,13 +61,6 @@ var player = new Vue({
             $('#loading').show();
             $('#offline').hide();
             document.domain = this.config.domain;
-
-            if(this.config.print)
-            {
-
-                //$('#view').css('height', '30px');
-            }
-
             $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + '?cdn=' + this.config.contentPath);
         },
         showScreen: function() {
@@ -128,6 +123,7 @@ var player = new Vue({
                     },'json')
                     .done(function(data) {
                         player.counter = data.counter;
+                        createjs.Sound.play("counterSound");
                     })
                     .fail(function() {
                         console.log('configuration error');

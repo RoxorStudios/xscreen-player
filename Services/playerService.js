@@ -6,7 +6,7 @@ const path          = require("path");
 const isOnline      = require('is-online');
 const escpos        = require('escpos');
 
-var counter         = 0;
+var counter         = 1;
 
 if(process.env.PRINT) {
     const device  = new escpos.Network(process.env.PRINT);
