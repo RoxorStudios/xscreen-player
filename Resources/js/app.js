@@ -155,12 +155,13 @@ var player = new Vue({
             }
         },
         updateCounter: function(count) {
-            hideCursor();
             clearTimeout(overlayTimeout);
             player.counter = count;
             $('#count-overlay').show();
             overlayTimeout = setTimeout(function(){
-                $('#count-overlay').fadeOut('fast');
+                $('#count-overlay').fadeOut('fast',function(e){
+                    hideCursor();
+                });
             },3000);
             createjs.Sound.play("counterSound");
         }
