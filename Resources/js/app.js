@@ -168,6 +168,7 @@ var player = new Vue({
 
 $(window).on('load',function(e){
     player.init();
+    $('body').css('cursor', 'none');
 });
 
 var handInterval;
