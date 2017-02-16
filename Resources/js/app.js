@@ -129,7 +129,6 @@ var player = new Vue({
             }
         },
         setCounter: function(e) {
-            clearTimeout(overlayTimeout);
             switch (e.keyCode) {
                 case 33:
                     var counter = this.counter - 1;
@@ -156,6 +155,7 @@ var player = new Vue({
             }
         },
         updateCounter: function(count) {
+            clearTimeout(overlayTimeout);
             player.counter = count;
             $('#count-overlay').show();
             overlayTimeout = setTimeout(function(){
