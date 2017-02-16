@@ -168,6 +168,10 @@ var player = new Vue({
                 case 34:
                     var counter = this.counter + 1;
                     break;
+                case 66:
+                    player.print();
+                    return;
+                    break;
             }
             if(typeof counter !== 'undefined'){
                 $.get( "/setcounter", {counter: counter}, function() {
