@@ -94,7 +94,7 @@ function print() {
               .align('ct')
               .image(logo, 'd24')
               .feed(1)
-              .image(printCounter, 'd24')
+              .image(number, 'd24')
               .feed(1)
               .text(getTicketMessage())
               .feed(2)
