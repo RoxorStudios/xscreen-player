@@ -88,6 +88,9 @@ function print() {
 
     var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
 
+        console.log(printCounter);
+        return;
+
         var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+printCounter+'.png', function(){
             device.open(function(){
               printer
