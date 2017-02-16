@@ -177,7 +177,7 @@ var cursorInterval;
 
 cursorInterval = setInterval(function(){
     hideCursor();
-}, 60000);
+}, 10000);
 
 function hideCursor() {
     $('body').css('cursor', 'none');
