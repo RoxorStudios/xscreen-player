@@ -155,6 +155,7 @@ var player = new Vue({
             }
         },
         updateCounter: function(count) {
+            hideCursor();
             clearTimeout(overlayTimeout);
             player.counter = count;
             $('#count-overlay').show();
@@ -168,8 +169,19 @@ var player = new Vue({
 
 $(window).on('load',function(e){
     player.init();
-    $('body').css('cursor', 'none');
+    hideCursor();
 });
+
+var cursorInterval;
+
+cursorInterval = setInterval(function(){
+    hideCursor();
+}, 60000);
+
+function hideCursor() {
+    $('body').css('cursor', 'none');
+    $('html').css('cursor', 'none');
+}
 
 var handInterval;
 handInterval = setInterval(function(){
