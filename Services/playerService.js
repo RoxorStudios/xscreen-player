@@ -7,6 +7,7 @@ const isOnline      = require('is-online');
 const escpos        = require('escpos');
 
 var counter         = 1;
+var printCounter    = 1;
 
 if(process.env.PRINT) {
     const device  = new escpos.Network(process.env.PRINT);
@@ -29,6 +30,7 @@ app.get('/config', function (req, res) {
         displayKey : process.env.DISPLAY_KEY,
         print:  printable,
         counter: counter,
+        printCounter: printCounter,
         count: process.env.COUNT,
         website: process.env.WEBSITE,
         socket: process.env.SOCKET
@@ -66,37 +68,33 @@ app.get('/setcounter', function (req, res, data) {
 
 app.get('/print', function (req, res) {
 
-    var printable = process.env.PRINT && !process.env.COUNT ? 1 : 0;
+    printCounter++;
+    printCounter = printCounter > 100 ? 1 : printCounter;
 
-    counter++;
-    counter = counter > 100 ? 1 : counter;
-
-    if(printable) {
-        print(counter);
-    }
+    print();
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
-        counter: counter
+        counter: printCounter
     }));
 
     return false;
 })
 
-function print(count) {
+function print() {
 
     const device  = new escpos.Network(process.env.PRINT);
     const printer = new escpos.Printer(device);
 
     var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
 
-        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+count+'.png', function(number){
+        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+printCounter+'.png', function(){
             device.open(function(){
               printer
               .align('ct')
               .image(logo, 'd24')
               .feed(1)
-              .image(number, 'd24')
+              .image(printCounter, 'd24')
               .feed(1)
               .text(getTicketMessage())
               .feed(2)

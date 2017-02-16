@@ -19,7 +19,8 @@ var player = new Vue({
         printable: null,
         printing: false,
         count: null,
-        counter: 1
+        counter: 1,
+        printCounter: 1,
     },
     methods: {
         init: function() {
@@ -40,6 +41,7 @@ var player = new Vue({
                 player.printable = player.config.print;
                 player.count = player.config.count;
                 player.counter = player.config.counter;
+                player.printCounter = player.config.printCounter;
 
                 if(typeof io !== 'undefined'){
                     socket = io(player.config.socket);
