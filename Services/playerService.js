@@ -88,7 +88,7 @@ function print() {
 
     var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
 
-        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+printCounter+'.png', function(){
+        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+printCounter+'.png', function(number){
             device.open(function(){
               printer
               .align('ct')
