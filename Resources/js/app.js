@@ -148,17 +148,26 @@ var player = new Vue({
 
                 },'json')
                 .done(function(data) {
+                    player.counter = data.counter;
                     player.socketEmit('counter',data.counter);
-                    player.updateCounter(data.counter);
+                    player.showCounterOverlay();
                 })
                 .fail(function() {
                     console.log('configuration error');
                 })
             }
         },
-        updateCounter: function(count) {
+        updateCounter: function(counter) {
             clearTimeout(overlayTimeout);
-            player.counter = count;
+            $.get( "/setcounter", {counter: counter}, function() {
+
+            },'json')
+            .done(function(data) {
+                player.counter = data.counter;
+                showCounterOverlay();
+            })
+        },
+        showCounterOverlay(): function() {
             $('#count-overlay').show();
             overlayTimeout = setTimeout(function(){
                 $('#count-overlay').fadeOut('fast',function(e){

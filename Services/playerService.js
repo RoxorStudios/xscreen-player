@@ -8,6 +8,7 @@ const escpos        = require('escpos');
 
 var counter         = 1;
 var printCounter    = 1;
+var printing        = false;
 
 if(process.env.PRINT) {
     const device  = new escpos.Network(process.env.PRINT);
@@ -68,23 +69,29 @@ app.get('/setcounter', function (req, res, data) {
 
 app.get('/print', function (req, res) {
 
-    printCounter++;
-    printCounter = printCounter > 100 ? 1 : printCounter;
+    if(!printing) {
 
-    print();
+        printing = true;
 
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-        counter: printCounter
-    }));
+        printCounter++;
+        printCounter = printCounter > 100 ? 1 : printCounter;
 
-    return false;
+        print();
+
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({
+            counter: printCounter
+        }));
+
+    }
+
+    return;
 })
 
 function print() {
 
-    const device  = new escpos.Network(process.env.PRINT);
-    const printer = new escpos.Printer(device);
+    var device  = new escpos.Network(process.env.PRINT);
+    var printer = new escpos.Printer(device);
 
     var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
 
@@ -101,6 +108,8 @@ function print() {
               .cut('partial')
               .close();
               });
+
+              printing = false;
         });
     });
 }
