@@ -194,7 +194,7 @@ var player = new Vue({
             },'json')
             .done(function(data) {
                 player.counter = data.counter;
-                showCounterOverlay();
+                player.showCounterOverlay();
             })
         },
         showCounterOverlay: function() {
