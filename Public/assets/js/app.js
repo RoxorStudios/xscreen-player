@@ -189,7 +189,6 @@ var player = new Vue({
             }
         },
         updateCounter: function(counter) {
-            clearTimeout(overlayTimeout);
             $.get( "/setcounter", {counter: counter}, function() {
 
             },'json')
@@ -199,6 +198,7 @@ var player = new Vue({
             })
         },
         showCounterOverlay: function() {
+            clearTimeout(overlayTimeout);
             $('#count-overlay').show();
             overlayTimeout = setTimeout(function(){
                 $('#count-overlay').fadeOut('fast',function(e){
