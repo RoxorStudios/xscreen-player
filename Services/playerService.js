@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/config', function (req, res) {
-    var printable = process.env.PRINT && !process.env.COUNT ? 1 : 0;
+    var printable = process.env.PRINT ? 1 : 0;
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
         domain: process.env.DOMAIN,
