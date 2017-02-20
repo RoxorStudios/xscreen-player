@@ -167,7 +167,7 @@ var player = new Vue({
                 showCounterOverlay();
             })
         },
-        showCounterOverlay(): function() {
+        showCounterOverlay: function() {
             $('#count-overlay').show();
             overlayTimeout = setTimeout(function(){
                 $('#count-overlay').fadeOut('fast',function(e){
