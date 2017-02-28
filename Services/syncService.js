@@ -53,7 +53,7 @@ function downloadMedia(media) {
             mediaFiles.push(file.media);
 
             //Images
-            if(parseInt(file.type) == 1) {
+            if(parseInt(file.type) == 1 || parseInt(file.type) == 2) {
 
                 if (!fs.existsSync(storagePath+file.media)) {
                     var dest = storagePath + '_' + file.media;
