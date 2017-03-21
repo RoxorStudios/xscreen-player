@@ -112,7 +112,6 @@ var player = new Vue({
             clearTimeout(timeout);
             $('.print-hand').removeClass('show');
             $('.print-message').html('Even geduld a.u.b.');
-            console.log("request");
             $.get( "/print",function() {
 
             },'json')
@@ -121,12 +120,10 @@ var player = new Vue({
                 var timeout = setTimeout(function(){
                     $('.print-message').html('Druk hier voor je volgnummer');
                 }, 3000);
-                console.log("done");
             })
             .fail(function() {
                 $('.print-message').html('Druk hier voor je volgnummer');
                 console.log('print configuration error');
-                console.log("fail");
             })
         },
         setCounter: function(e) {

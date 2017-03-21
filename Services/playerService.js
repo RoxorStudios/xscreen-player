@@ -71,11 +71,13 @@ app.get('/print', function (req, res) {
     printCounter++;
     printCounter = printCounter > 100 ? 1 : printCounter;
 
+    var realNumber = printCounter;
+
     print();
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
-        counter: printCounter
+        counter: realNumber
     }));
 
     return;
@@ -85,10 +87,11 @@ function print() {
 
     var device  = new escpos.Network(process.env.PRINT);
     var printer = new escpos.Printer(device);
+    var realNumber = printCounter;
 
     var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
 
-        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+printCounter+'.png', function(number){
+        var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+realNumber+'.png', function(number){
             device.open(function(){
               printer
               .align('ct')
