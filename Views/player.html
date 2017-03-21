@@ -28,7 +28,7 @@
 
         <div id="count-container" v-if="count"><p>{{ counter }}</p></div>
         <div id="count-overlay"><div id="counter-overlay-number">{{ counter }}</div></div>
-        <div id="print-container" class="noselect" v-on:click="print" v-if="printable">
+        <div id="print-container" class="noselect" v-on:touchstart="print" v-if="printable">
             <img class="print-logo noselect" src="/client/logo_print.png">
             <img class="print-hand noselect" src="/assets/images/hand.png">
             <p class="print-message noselect">Druk hier voor je volgnummer</p>
