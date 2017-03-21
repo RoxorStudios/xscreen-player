@@ -36,6 +36,7 @@ var socket = null;
 //Timeouts
 var pingTimeOut;
 var overlayTimeout;
+var printTimeout;
 
 createjs.Sound.registerSound("/assets/sounds/bling.mp3", "counterSound");
 
@@ -139,8 +140,7 @@ var player = new Vue({
             pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
         },
         print: function() {
-
-            clearTimeout(timeout);
+            clearTimeout(printTimeout);
             $('.print-hand').removeClass('show');
             $('.print-message').html('Even geduld a.u.b.');
             $.get( "/print",function() {
@@ -148,7 +148,7 @@ var player = new Vue({
             },'json')
             .done(function(data) {
                 $('.print-message').html('Je hebt nummer ' + data.counter);
-                var timeout = setTimeout(function(){
+                printTimeout = setTimeout(function(){
                     $('.print-message').html('Druk hier voor je volgnummer');
                 }, 3000);
             })
