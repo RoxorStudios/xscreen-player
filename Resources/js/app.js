@@ -140,27 +140,39 @@ var player = new Vue({
                     break;
             }
             if(typeof counter !== 'undefined'){
-                $.get( "/setcounter", {counter: counter}, function() {
+
+                var realcount = counter;
+
+                $.get( "/setcounter", {counter: realcount}, function() {
 
                 },'json')
                 .done(function(data) {
-                    player.counter = data.counter;
-                    player.socketEmit('counter',data.counter);
-                    player.showCounterOverlay();
+
                 })
                 .fail(function() {
                     console.log('configuration error');
                 })
+                .always(function() {
+                    player.counter = realcount;
+                    player.socketEmit('counter',realcount);
+                    player.showCounterOverlay();
+                });
             }
         },
         updateCounter: function(counter) {
-            $.get( "/setcounter", {counter: counter}, function() {
+
+            var realcount = counter;
+
+            $.get( "/setcounter", {counter: realcount}, function() {
 
             },'json')
             .done(function(data) {
-                player.counter = data.counter;
-                player.showCounterOverlay();
+
             })
+            .always(function(){
+                player.counter = realcount;
+                player.showCounterOverlay();
+            });
         },
         showCounterOverlay: function() {
             clearTimeout(overlayTimeout);

@@ -139,27 +139,23 @@ var player = new Vue({
             pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
         },
         print: function() {
-            if(this.printable && !this.printing) {
-                this.printing = true;
-                $('.print-hand').removeClass('show');
-                $('.print-message').html('Even geduld a.u.b.');
-                $.get( "/print",function() {
 
-                },'json')
-                .done(function(data) {
-                    player.printing = false;
-                    $('.print-message').html('Je hebt nummer ' + data.counter);
-                    var timeout = setTimeout(function(){
-                        clearTimeout(timeout);
-                        $('.print-message').html('Druk hier voor je volgnummer');
-                    }, 3000);
-                })
-                .fail(function() {
-                    player.printing = false;
+            clearTimeout(timeout);
+            $('.print-hand').removeClass('show');
+            $('.print-message').html('Even geduld a.u.b.');
+            $.get( "/print",function() {
+
+            },'json')
+            .done(function(data) {
+                $('.print-message').html('Je hebt nummer ' + data.counter);
+                var timeout = setTimeout(function(){
                     $('.print-message').html('Druk hier voor je volgnummer');
-                    console.log('print configuration error');
-                })
-            }
+                }, 3000);
+            })
+            .fail(function() {
+                $('.print-message').html('Druk hier voor je volgnummer');
+                console.log('print configuration error');
+            })
         },
         setCounter: function(e) {
             switch (e.keyCode) {
@@ -175,27 +171,39 @@ var player = new Vue({
                     break;
             }
             if(typeof counter !== 'undefined'){
-                $.get( "/setcounter", {counter: counter}, function() {
+
+                var realcount = counter;
+
+                $.get( "/setcounter", {counter: realcount}, function() {
 
                 },'json')
                 .done(function(data) {
-                    player.counter = data.counter;
-                    player.socketEmit('counter',data.counter);
-                    player.showCounterOverlay();
+
                 })
                 .fail(function() {
                     console.log('configuration error');
                 })
+                .always(function() {
+                    player.counter = realcount;
+                    player.socketEmit('counter',realcount);
+                    player.showCounterOverlay();
+                });
             }
         },
         updateCounter: function(counter) {
-            $.get( "/setcounter", {counter: counter}, function() {
+
+            var realcount = counter;
+
+            $.get( "/setcounter", {counter: realcount}, function() {
 
             },'json')
             .done(function(data) {
-                player.counter = data.counter;
-                player.showCounterOverlay();
+
             })
+            .always(function(){
+                player.counter = realcount;
+                player.showCounterOverlay();
+            });
         },
         showCounterOverlay: function() {
             clearTimeout(overlayTimeout);
