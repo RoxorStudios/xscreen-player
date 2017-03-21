@@ -75,7 +75,7 @@ app.get('/print', function (req, res) {
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
-        counter: currentNumber
+        counter: printCounter
     }));
 
     return;
