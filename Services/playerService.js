@@ -7,8 +7,7 @@ const isOnline      = require('is-online');
 const escpos        = require('escpos');
 
 var counter         = 1;
-var printCounter    = 1;
-var printing        = false;
+var printCounter    = 0;
 
 if(process.env.PRINT) {
     const device  = new escpos.Network(process.env.PRINT);
@@ -69,21 +68,15 @@ app.get('/setcounter', function (req, res, data) {
 
 app.get('/print', function (req, res) {
 
-    if(!printing) {
+    printCounter++;
+    printCounter = printCounter > 100 ? 1 : printCounter;
 
-        printing = true;
+    print();
 
-        printCounter++;
-        printCounter = printCounter > 100 ? 1 : printCounter;
-
-        print();
-
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({
-            counter: printCounter
-        }));
-
-    }
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+        counter: currentNumber
+    }));
 
     return;
 })
@@ -108,8 +101,6 @@ function print() {
               .cut('partial')
               .close();
               });
-
-              printing = false;
         });
     });
 }

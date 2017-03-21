@@ -108,21 +108,25 @@ var player = new Vue({
             pingTimeOut = setTimeout(() => this.reloadScreen(), 10000);
         },
         print: function() {
+
+            clearTimeout(timeout);
             $('.print-hand').removeClass('show');
             $('.print-message').html('Even geduld a.u.b.');
+            console.log("request");
             $.get( "/print",function() {
 
             },'json')
             .done(function(data) {
                 $('.print-message').html('Je hebt nummer ' + data.counter);
                 var timeout = setTimeout(function(){
-                    clearTimeout(timeout);
                     $('.print-message').html('Druk hier voor je volgnummer');
                 }, 3000);
+                console.log("done");
             })
             .fail(function() {
                 $('.print-message').html('Druk hier voor je volgnummer');
                 console.log('print configuration error');
+                console.log("fail");
             })
         },
         setCounter: function(e) {
