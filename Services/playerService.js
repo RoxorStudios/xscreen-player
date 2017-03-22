@@ -69,7 +69,7 @@ app.get('/setcounter', function (req, res, data) {
 app.get('/print', function (req, res) {
 
     printCounter++;
-    printCounter = printCounter > 100 ? 1 : printCounter;
+    printCounter = printCounter > 99 ? 1 : printCounter;
 
     var realNumber = printCounter;
 
