@@ -141,9 +141,9 @@ var player = new Vue({
             }
             if(typeof counter !== 'undefined'){
 
-                var realcount = counter;
+                var realcount = counter <= 0 ? 99 : (counter >= 100 ? 1 : counter);
 
-                $.get( "/setcounter", {counter: realcount}, function() {
+                $.get( "/setcounter", {counter: counter}, function() {
 
                 },'json')
                 .done(function(data) {
