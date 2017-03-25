@@ -191,6 +191,9 @@ $(window).on('load',function(e){
 });
 
 $(document).keyup(function(e){
+    $('#remote-signal').hide();
+    $('#remote-signal').show();
+    $('#remote-signal').fadeOut('fast');
     player.setCounter(e);
 });
 

@@ -37,6 +37,18 @@ body, html {
         display: none;
     }
 
+    #remote-signal {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        position: fixed;
+        background-color: green;
+        bottom: 20px;
+        left: 20px;
+        z-index: 150;
+        display: none;
+    }
+
     #count-overlay {
         display: none;
         z-index: 30;
