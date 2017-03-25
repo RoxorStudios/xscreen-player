@@ -27,7 +27,6 @@ var player = new Vue({
         init: function() {
             this.fetchConfig();
             this.fetchStatus();
-            window.addEventListener('keyup', this.setCounter);
             setInterval(function(){
                 player.fetchStatus();
             }, 5000);
@@ -52,7 +51,6 @@ var player = new Vue({
                     });
 
                 }
-
                 player.loadScreen();
             })
             .fail(function() {
@@ -190,6 +188,10 @@ var player = new Vue({
 $(window).on('load',function(e){
     player.init();
     hideCursor();
+});
+
+$(document).keyup(function(e){
+    player.setCounter(e);
 });
 
 var cursorInterval;
