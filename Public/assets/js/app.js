@@ -163,7 +163,7 @@ var player = new Vue({
                 case 34:
                     var counter = this.counter + 1;
                     break;
-                case 66:
+                case 186:
                     player.print();
                     return;
                     break;
