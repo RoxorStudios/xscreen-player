@@ -124,8 +124,8 @@ var player = new Vue({
                 console.log('print configuration error');
             })
         },
-        setCounter: function(e) {
-            switch (e.keyCode) {
+        setCounter: function(keycode) {
+            switch (keycode) {
                 case 33:
                     var counter = this.counter - 1;
                     break;
@@ -190,12 +190,20 @@ $(window).on('load',function(e){
     hideCursor();
 });
 
-$(document).keyup(function(e){
+document.addEventListener('keyup', receiveKeys, false);
+
+function receiveKeys(e) {
+    e.preventDefault();
     $('#remote-signal').hide();
     $('#remote-signal').show();
     $('#remote-signal').fadeOut('fast');
-    player.setCounter(e);
-});
+    player.setCounter(e.keyCode);
+}
+
+setTimeout(function(){
+    document.removeEventListener('keyup', receiveKeys, false);
+    document.addEventListener('keyup', receiveKeys, false);
+},10000);
 
 var cursorInterval;
 
