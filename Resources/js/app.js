@@ -125,7 +125,6 @@ var player = new Vue({
             })
         },
         setCounter: function(keycode) {
-            alert(keycode);
             switch (keycode) {
                 case 33:
                     var counter = this.counter - 1;
@@ -191,10 +190,10 @@ $(window).on('load',function(e){
     hideCursor();
 });
 
-document.addEventListener('keydown', receiveKeys, false);
+document.addEventListener('keyup', receiveKeys, false);
 
 function receiveKeys(e) {
-    alert(e);
+    alert('received!');
     e.preventDefault();
     $('#remote-signal').hide();
     $('#remote-signal').show();
