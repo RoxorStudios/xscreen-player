@@ -193,12 +193,12 @@ $(window).on('load',function(e){
 document.addEventListener('keyup', receiveKeys, false);
 
 function receiveKeys(e) {
-    alert('received!');
     e.preventDefault();
     $('#remote-signal').hide();
     $('#remote-signal').show();
     $('#remote-signal').fadeOut('fast');
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    alert(key);
     player.setCounter(key);
 }
 
