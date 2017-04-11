@@ -225,6 +225,7 @@ $(window).on('load',function(e){
 document.addEventListener('keydown', receiveKeys, false);
 
 function receiveKeys(e) {
+    alert(e);
     e.preventDefault();
     $('#remote-signal').hide();
     $('#remote-signal').show();
