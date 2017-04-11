@@ -156,6 +156,7 @@ var player = new Vue({
             })
         },
         setCounter: function(keycode) {
+            alert(keycode);
             switch (keycode) {
                 case 33:
                     var counter = this.counter - 1;
