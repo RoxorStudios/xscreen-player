@@ -191,7 +191,7 @@ $(window).on('load',function(e){
     hideCursor();
 });
 
-document.addEventListener('keyup', receiveKeys, false);
+document.addEventListener('keydown', receiveKeys, false);
 
 function receiveKeys(e) {
     e.preventDefault();
