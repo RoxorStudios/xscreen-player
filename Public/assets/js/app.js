@@ -229,7 +229,8 @@ function receiveKeys(e) {
     $('#remote-signal').hide();
     $('#remote-signal').show();
     $('#remote-signal').fadeOut('fast');
-    player.setCounter(e.keyCode);
+    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+    player.setCounter(key);
 }
 
 setTimeout(function(){
