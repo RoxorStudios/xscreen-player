@@ -132,7 +132,7 @@ var player = new Vue({
                 case 34:
                     var counter = this.counter + 1;
                     break;
-                case 186:
+                case 190:
                     player.print();
                     return;
                     break;
@@ -198,7 +198,6 @@ function receiveKeys(e) {
     $('#remote-signal').show();
     $('#remote-signal').fadeOut('fast');
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
-    alert(key);
     player.setCounter(key);
 }
 
