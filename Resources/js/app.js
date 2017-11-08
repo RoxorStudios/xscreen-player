@@ -201,11 +201,6 @@ function receiveKeys(e) {
     player.setCounter(key);
 }
 
-setTimeout(function(){
-    document.removeEventListener('keyup', receiveKeys, false);
-    document.addEventListener('keyup', receiveKeys, false);
-},10000);
-
 var cursorInterval;
 
 cursorInterval = setInterval(function(){
