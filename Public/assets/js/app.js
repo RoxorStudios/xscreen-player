@@ -147,11 +147,11 @@ var player = new Vue({
             .done(function(data) {
                 $('.print-message').html('Je hebt nummer ' + data.counter);
                 printTimeout = setTimeout(function(){
-                    $('.print-message').html('Druk hier voor je volgnummer');
+                    $('.print-message').html('Tik hier met één vinger<br>voor je volgnummer');
                 }, 3000);
             })
             .fail(function() {
-                $('.print-message').html('Druk hier voor je volgnummer');
+                $('.print-message').html('Tik hier met één vinger<br>voor je volgnummer');
                 console.log('print configuration error');
             })
         },
@@ -231,11 +231,6 @@ function receiveKeys(e) {
     var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
     player.setCounter(key);
 }
-
-setTimeout(function(){
-    document.removeEventListener('keyup', receiveKeys, false);
-    document.addEventListener('keyup', receiveKeys, false);
-},10000);
 
 var cursorInterval;
 

@@ -116,11 +116,11 @@ var player = new Vue({
             .done(function(data) {
                 $('.print-message').html('Je hebt nummer ' + data.counter);
                 printTimeout = setTimeout(function(){
-                    $('.print-message').html('Druk hier voor je volgnummer');
+                    $('.print-message').html('Tik hier met één vinger<br>voor je volgnummer');
                 }, 3000);
             })
             .fail(function() {
-                $('.print-message').html('Druk hier voor je volgnummer');
+                $('.print-message').html('Tik hier met één vinger<br>voor je volgnummer');
                 console.log('print configuration error');
             })
         },
