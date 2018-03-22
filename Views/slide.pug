@@ -1,0 +1,158 @@
+doctype html
+html
+    head
+        title="XSCREEN"
+        link(rel="stylesheet",href='/assets/css/live.css')
+        script(src='/assets/js/live.js')
+
+        each font in slide.fonts
+            style.
+                @import url('https://fonts.googleapis.com/css?family=#{font.google_embed}');
+        
+        style.
+            .object {
+                display: block;
+                position: absolute;
+                -webkit-transform-origin: center center;
+            }
+            .ui-resizable-helper { border: 1px dotted gray; }
+
+            #slidewrap {
+                background-color: #FFFFFF;
+                width: #{screen.width}px;
+                height: #{screen.height}px;
+                overflow: hidden;
+                position: absolute;
+            }
+
+        each layer in slide.layers
+            style
+                |#object-#{layer.uniqueid} {
+                |    z-index: #{layer.zindex};
+                |    opacity: #{layer.opacity/100};
+                |    left: #{layer.left}px;
+                |    top: #{layer.top}px;
+                |    cursor: pointer;
+                |    transform: rotate(#{layer.rotation}deg) scale(#{layer.scale});
+                |    -webkit-transform: rotate(#{layer.rotation}deg) scale(#{layer.scale});
+                |    -moz-transform: rotate(#{layer.rotation}deg) scale(#{layer.scale});
+                |    -o-transform: rotate(#{layer.rotation}deg) scale(#{layer.scale});
+                |    -ms-transform: rotate(#{layer.rotation}deg) scale(#{layer.scale});
+                |    border: 1px rgba(0,0,0,0) solid;
+
+                each animation in slide.animations
+                    if animation.layer_id == layer.id && animation.type == 1
+                        case animation.effect
+                            when 'slide-left'
+                            when 'slide-right'
+                                | left: #{animation.start}px;
+                            when 'slide-top'
+                            when 'slide-bottom'
+                                | top: #{animation.start}px;
+                            when 'fade'
+                                | opacity: #{animation.start/100};
+                            when 'blob'
+                                | transform: rotate(#{layer.rotation}deg) scale(0);
+                                | -webkit-transform: rotate(#{layer.rotation}deg) scale(0);
+                                | -moz-transform: rotate(#{layer.rotation}deg) scale(0);
+                                | -o-transform: rotate(#{layer.rotation}deg) scale(0);
+                                | -ms-transform: rotate(#{layer.rotation}deg) scale(0);
+                
+                case layer.type
+                    when '3'
+                        | color: ##{layer.color};
+                        | display: block;
+                        | line-height: #{layer.lineheight}px;
+                        | text-align: #{layer.align};
+                        | font-size: #{layer.fontsize}px;
+                        | font-family: #{layer.font.google_family};
+                        | font-weight: #{layer.font.google_fontweight};
+                        | white-space: normal;
+                        if parseInt(layer.width)
+                            | width: #{layer.width}px;
+
+                |}
+
+        script.
+    
+            document.domain = 'xscreen.io'
+
+    body
+
+        div(id="slidewrap")
+
+            each layer in slide.layers
+                case layer.type
+                    when '1'
+                        <img id="object-#{layer.uniqueid}" class="object" src="#{contentPath + layer.media.raw}">
+                    when '3'
+                        <div id="object-#{layer.uniqueid}" class="object">#{layer.text}</div>
+
+        script
+            | $('.object').css('pointer-events','none').css('-webkit-user-select', 'none');
+            | $(window).ready(function(){
+            each animation in slide.animations
+                case animation.type
+                    when '1'
+                    when '2'
+                        case animation.effect
+                            when 'slide-left'
+                            when 'slide-right'
+                                -
+                                    var css_property = 'left'
+                                    var start = animation.start + 'px'
+                                    var stop = animation.stop + 'px'
+                            when 'slide-top'
+                            when 'slide-bottom'
+                                -
+                                    var css_property = 'top'
+                                    var start = animation.start + 'px'
+                                    var stop = animation.stop + 'px'
+                            when 'fade'
+                                -
+                                    var css_property = 'opacity'
+                                    var start = animation.start
+                                    var stop = animation.stop
+                            when 'blob'
+                                -
+                                    var css_property = 'transform'
+                                    var start = 'scale(' + animation.start + ') rotate(' + animation.rotation + 'deg)'
+                                    var stop = 'scale(' + animation.stop + ') rotate(' + animation.rotation + 'deg)'
+                        
+                        |   $('#object-#{animation.layer_uid}').tween({
+                        |       #{css_property}:{
+                        |           start: '#{start}',
+                        |           stop: '#{stop}',
+                        |           time: #{animation.delay},
+                        |           duration: #{animation.duration},
+                        |           effect:'#{animation.motion}'
+                        |       }
+                        |   });
+
+                    default
+                        -
+                            var css_property = 'transform'
+                            var scale = parseInt(animation.scale) + parseInt(animation.start)
+                            var rotation = parseInt(animation.rotation) + parseInt(animation.stop)
+                            var start = 'scale(' + animation.scale + ') rotate(' + animation.rotation + 'deg)'
+                            var stop = 'scale(' + scale + ') rotate(' + rotation + 'deg)'
+
+                        |   $('#object-#{animation.layer_uid}').tween({
+                        |       #{css_property}:{
+                        |           start: '#{start}',
+                        |           stop: '#{stop}',
+                        |           time: #{animation.delay},
+                        |           duration: #{animation.duration},
+                        |           effect:'#{animation.motion}'
+                        |       }
+                        |   });
+            |
+            |   $.play();
+            |   parent.clearSlideErrorTimeout();
+
+
+            |   setTimeout(function(){
+            |       parent.slideEnd('#{uid}');
+            |   }, #{slide['length']} );
+
+            | });

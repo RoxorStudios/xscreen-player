@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,9 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <script src="http://local.xscreen.io:3000/socket.io/socket.io.js"></script>
 </head>
-
 <body>
-
     <div id="overlay"></div>
     <div id="player">
         <div id="offline">
@@ -25,7 +22,6 @@
                 <img id="logo" src="/assets/images/logo.png">
             </div>
         </div>
-
         <div id="remote-signal"></div>
         <div id="count-container" v-if="count"><p>{{ counter }}</p></div>
         <div id="count-overlay"><div id="counter-overlay-number">{{ counter }}</div></div>
@@ -35,9 +31,7 @@
             <p class="print-message noselect">Tik hier met één vinger<br>voor je volgnummer</p>
         </div>
     </div>
-
     <iframe id="view" scrolling="no"></iframe>
-
     <script src="/assets/js/app.js?v=0.0.2"></script>
 </body>
 </html>

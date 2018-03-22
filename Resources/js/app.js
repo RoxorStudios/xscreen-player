@@ -63,10 +63,10 @@ var player = new Vue({
             },'json')
             .done(function(status) {
                 if(!player.status.online && status.online) {
-                    player.goOnline();
+                    //player.goOnline();
                 }
                 if(!status.online) {
-                    player.goOffline();
+                    //player.goOffline();
                 }
                 player.status = status;
             })
@@ -78,7 +78,7 @@ var player = new Vue({
             $('#loading').show();
             $('#offline').hide();
             document.domain = this.config.domain;
-            $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + '?cdn=' + this.config.contentPath);
+            $('#view').attr('src','/screen');
         },
         showScreen: function() {
             setTimeout(function(){

@@ -3,8 +3,11 @@ require('dotenv').config();
 const express       = require('express')
 const app           = express()
 const path          = require("path");
-const isOnline      = require('is-online');
+const isReachable   = require('is-reachable');
 const escpos        = require('escpos');
+const jsonfile      = require('jsonfile')
+
+var screenPath      = path.join(__dirname+'/../Public/screen/');
 
 var counter         = 1;
 var printCounter    = 0;
@@ -15,6 +18,8 @@ if(process.env.PRINT) {
 }
 
 app.use(express.static('../Public'));
+app.set('views', path.join(__dirname, '/../Views'));
+app.set('view engine', 'pug')
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/../Views/player.html'));
@@ -37,21 +42,58 @@ app.get('/config', function (req, res) {
     }));
 })
 
-app.get('/status', function (req, res) {
-
-    var online = false;
-
-    res.setHeader('Content-Type', 'application/json');
-
-    isOnline().then(online => {
-        res.send(JSON.stringify({
-            online : online
-        }));
-    });
+app.get('/screen', function (req, res) {
+    res.render("screen");
 })
 
-app.listen(process.env.PORT, function () {
-    //Server started
+app.get('/slide/:uid', function (req, res) {
+    jsonfile.readFile(screenPath+'screendata.json', function(err, json) {
+        if(err){
+            res.sendStatus(404)
+        } else {            
+            var slide = json.playlist.find(function(slide) {
+                return slide.uid == req.params.uid;
+            });
+            if(slide){
+                var data = {
+                    contentPath: process.env.CONTENT_PATH,
+                    screen: json.screen,
+                    slide: slide,
+                    uid: req.query.uid
+                };
+                switch(slide.type){
+                    case 'slide':
+                        res.render("slide",data);
+                        break;
+                    case 'video':
+                        res.render("video",data);
+                        break;
+                }
+            } else {
+                res.sendStatus(404)
+            }
+        }
+    })
+})
+
+app.get('/screendata', function(req,res) {
+    jsonfile.readFile(screenPath+'screendata.json', function(err, json) {
+        if(err){
+            res.sendStatus(404)
+        } else {
+            res.setHeader('Content-Type', 'application/json')
+            res.send(json)
+        }
+    })
+})
+
+app.get('/status', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    isReachable('xscreen.io').then(reachable => {
+        res.send(JSON.stringify({
+            online : reachable
+        }));
+    });
 })
 
 app.get('/setcounter', function (req, res, data) {
@@ -116,3 +158,7 @@ function getTicketMessage() {
     message = message.split("\\n");
     return message.join("\n");
 }
+
+app.listen(process.env.PORT, function () {
+    //Server started
+})

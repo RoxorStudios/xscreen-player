@@ -5,8 +5,10 @@ const unirest       = require('unirest');
 const fs            = require('fs');
 const https         = require('https');
 const async         = require('async');
+const jsonfile      = require('jsonfile')
 
 var storagePath     = path.join(__dirname+'/../Public/content/');
+var screenPath      = path.join(__dirname+'/../Public/screen/');
 var contentPath     = process.env.CONTENT_PATH;
 var displayKey      = process.env.DISPLAY_KEY;
 var endpoint        = process.env.LIVE;
@@ -24,14 +26,15 @@ function sync() {
     media = [];
     mediaFiles = [];
 
-    unirest.get(endpoint + 'sync/' + displayKey)
+    unirest.get(endpoint + 'sync2/' + displayKey)
     .headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
     .timeout(10000)
     .send()
     .end(function (response) {
         if(response.statusType == 2 && isJson(response.body)) {
-            media = JSON.parse(response.body);
-            downloadMedia(media);
+            var syncData = JSON.parse(response.body);
+            saveScreenData(syncData.screendata);
+            downloadMedia(syncData.media);
         } else {
             restartSync();
         }
@@ -42,6 +45,14 @@ sync();
 
 function restartSync() {
     syncTimeout = setTimeout(sync, syncInterval * 1000);
+}
+
+function saveScreenData(screenData) {
+    jsonfile.writeFile(screenPath+'screendata.json', screenData, function (err) {
+        if(err){
+            console.error(err)
+        }
+    })
 }
 
 function downloadMedia(media) {

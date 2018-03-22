@@ -1,0 +1,14 @@
+doctype html
+html
+    head
+        title=XS
+        link(rel="stylesheet",href='/assets/css/live.css')
+        script(src='/assets/js/live.js')
+        script.
+            $(window).on('load', function () {
+                loadScreen();
+                setInterval(function () {
+                    pingHome();
+                }, 5000);
+            });
+    body
