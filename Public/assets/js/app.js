@@ -56,7 +56,7 @@ var player = new Vue({
             this.fetchStatus();
             setInterval(function(){
                 player.fetchStatus();
-            }, 5000);
+            }, 10000);
         },
         fetchConfig: function() {
             $.get( "/config", function(config) {
@@ -69,6 +69,8 @@ var player = new Vue({
                 player.count = player.config.count;
                 player.counter = player.config.counter;
                 player.printCounter = player.config.printCounter;
+                
+                document.domain = config.domain;
 
                 if(typeof io !== 'undefined'){
                     socket = io(player.config.socket);
@@ -104,7 +106,6 @@ var player = new Vue({
         loadScreen: function () {
             $('#loading').show();
             $('#offline').hide();
-            document.domain = this.config.domain;
             $('#view').attr('src','/screen');
         },
         showScreen: function() {

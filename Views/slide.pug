@@ -132,8 +132,8 @@ html
                     default
                         -
                             var css_property = 'transform'
-                            var scale = parseInt(animation.scale) + parseInt(animation.start)
-                            var rotation = parseInt(animation.rotation) + parseInt(animation.stop)
+                            var scale = parseFloat(animation.scale) + parseFloat(animation.start)
+                            var rotation = parseFloat(animation.rotation) + parseFloat(animation.stop)
                             var start = 'scale(' + animation.scale + ') rotate(' + animation.rotation + 'deg)'
                             var stop = 'scale(' + scale + ') rotate(' + rotation + 'deg)'
 

@@ -22,7 +22,7 @@ app.set('views', path.join(__dirname, '/../Views'));
 app.set('view engine', 'pug')
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+'/../Views/player.html'));
+    res.render("player");
 })
 
 app.get('/config', function (req, res) {
