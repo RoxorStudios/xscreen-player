@@ -10,7 +10,7 @@ const del           = require('del')
 const copy          = require('recursive-copy')
 
 require('dotenv').config({
-    path: path.join(__dirname+'/../../.env')
+    path: path.join(__dirname+'/.env')
 });
 
 var displayKey      = process.env.DISPLAY_KEY;
@@ -73,21 +73,21 @@ function restartSync() {
 
 function runUpdate() {
     console.log('start');
-    download('https://github.com/RoxorStudios/xscreen-player/archive/master.zip',path.join(__dirname+'/../../install'),{
+    download('https://github.com/RoxorStudios/xscreen-player/archive/master.zip',path.join(__dirname+'/install'),{
         extract: true
     }).then(data => {
         console.log('download done!')
         //Check if directory exists
-        if (fs.existsSync(path.join(__dirname+'/../../install/xscreen-player-master/dist'))) {
+        if (fs.existsSync(path.join(__dirname+'/install/xscreen-player-master/dist'))) {
             console.log('dist folder found')
-            del([path.join(__dirname+'/../../install/*'),"!" + path.join(__dirname+'/../../install/xscreen-player-master')],{
+            del([path.join(__dirname+'/install/*'),"!" + path.join(__dirname+'/install/xscreen-player-master')],{
                 force: true
             }).then(function(paths){
                 console.log('dist folder cleaned');
-                copy(path.join(__dirname+'/../../install/xscreen-player-master/dist'), path.join(__dirname+'/../../install'))
+                copy(path.join(__dirname+'/install/xscreen-player-master/dist'), path.join(__dirname+'/install'))
                 .then(function(results) {
                     console.info('Copied ' + results.length + ' files to install folder');
-                    del([path.join(__dirname+'/../../install/xscreen-player-master')],{
+                    del([path.join(__dirname+'/install/xscreen-player-master')],{
                         force: true
                     }).then(function(paths){
                         console.log('Installation folder remove, update succeeded')

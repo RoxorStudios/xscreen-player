@@ -26,8 +26,8 @@
     {
         "append": true,
         "watch": true,
-        "script": "homeService.js",
-        "sourceDir": "/var/xscreen-player/install/services",
+        "script": "ping.js",
+        "sourceDir": "/var/xscreen-player",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     }
