@@ -12,6 +12,7 @@
     "async": "^2.1.4",
     "brightness-cli": "^2.3.0",
     "dotenv": "^4.0.0",
+    "download": "^6.2.5",
     "express": "^4.14.1",
     "external-ip": "^2.0.3",
     "gulp": "^3.9.1",

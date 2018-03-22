@@ -1,23 +1,46 @@
-require('dotenv').config();
-
 const path          = require('path');
 const unirest       = require('unirest');
 const fs            = require('fs');
 const https         = require('https');
 const async         = require('async');
 const jsonfile      = require('jsonfile')
+const download      = require('download');
 
-var storagePath     = path.join(__dirname+'/../Public/content/');
-var screenPath      = path.join(__dirname+'/../Public/screen/');
+require('dotenv').config({
+    path: path.join(__dirname+'/../../.env')
+});
+
+var storagePath     = path.join(__dirname+'/../../public/content/');
+var screenPath      = path.join(__dirname+'/../../public/screen/');
 var contentPath     = process.env.CONTENT_PATH;
 var displayKey      = process.env.DISPLAY_KEY;
-var endpoint        = process.env.LIVE;
+var endpoint        = 'http://xscreen.io/live/';
 
 var syncInterval    = 60; //Seconds
 
 var media;
 var mediaFiles;
 var syncTimeout;
+
+installUpdates();
+return;
+
+function installUpdates() {
+    console.log('start');
+    download('https://github.com/RoxorStudios/xscreen-player/archive/master.zip',path.join(__dirname+'/../../install'),{
+        extract: true
+    }).then(data => {
+        console.log('download done!')
+        //Check if directory exists
+        if (fs.existsSync(path.join(__dirname+'/../../install/xscreen-player-master/dist'))) {
+            console.log('dist folder found')
+        } else {
+            console.error('Dist folder not found')
+        }
+    }).catch(() => {
+        console.error('Could not download repository')
+    });
+}
 
 function sync() {
 

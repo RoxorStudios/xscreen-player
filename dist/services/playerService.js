@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express       = require('express')
 const app           = express()
 const path          = require("path");
@@ -7,7 +5,11 @@ const isReachable   = require('is-reachable');
 const escpos        = require('escpos');
 const jsonfile      = require('jsonfile')
 
-var screenPath      = path.join(__dirname+'/../Public/screen/');
+require('dotenv').config({
+    path: path.join(__dirname+'/../../.env')
+});
+
+var screenPath      = path.join(__dirname+'/../../public/screen/');
 
 var counter         = 1;
 var printCounter    = 0;
@@ -17,8 +19,15 @@ if(process.env.PRINT) {
     const printer = new escpos.Printer(device);
 }
 
-app.use(express.static('../Public'));
-app.set('views', path.join(__dirname, '/../Views'));
+if(process.env.APP_ENV == 'local'){
+    app.use('/assets',express.static(path.join(__dirname, '/../../dist/assets')));
+    app.set('views', path.join(__dirname, '/../../dist/views'));
+} else {
+    app.use('/assets',express.static(path.join(__dirname, '/../../install/assets')));
+    app.set('views', path.join(__dirname, '/../../install/views'));
+}
+
+app.use(express.static(path.join(__dirname, '/../../public')));
 app.set('view engine', 'pug')
 
 app.get('/', function (req, res) {
@@ -29,21 +38,17 @@ app.get('/config', function (req, res) {
     var printable = process.env.PRINT ? 1 : 0;
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
-        domain: process.env.DOMAIN,
-        live: process.env.LIVE,
+        domain: 'xscreen.io',
+        live: 'http://xscreen.io/live/',
         contentPath: process.env.CONTENT_PATH,
+        socket: 'http://local.xscreen.io:3000/',
         displayKey : process.env.DISPLAY_KEY,
         print:  printable,
         counter: counter,
         printCounter: printCounter,
         count: process.env.COUNT,
-        website: process.env.WEBSITE,
-        socket: process.env.SOCKET
+        website: process.env.WEBSITE
     }));
-})
-
-app.get('/screen', function (req, res) {
-    res.render("screen");
 })
 
 app.get('/slide/:uid', function (req, res) {

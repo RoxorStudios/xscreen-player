@@ -1,13 +1,15 @@
-require('dotenv').config();
-
 const unirest       = require('unirest');
 const reboot        = require('nodejs-system-reboot');
 const getIP         = require('external-ip')();
 const internalIp    = require('internal-ip');
 const procStats     = require('process-stats');
 
+require('dotenv').config({
+    path: path.join(__dirname+'/../../.env')
+});
+
 var displayKey      = process.env.DISPLAY_KEY;
-var endpoint        = process.env.LIVE;
+var endpoint        = 'http://xscreen.io/live/';
 
 var syncInterval    = 10; //Seconds
 var syncTimeout;

@@ -1,5 +1,6 @@
-//Socket
+document.domain = 'xscreen.io';
 
+//Socket
 var socket = null;
 
 //Timeouts
@@ -7,7 +8,29 @@ var pingTimeOut;
 var overlayTimeout;
 var printTimeout;
 
+//Playlist
+var screenData = null;
+var currentSlide = 0;
+
+var removeSlides = [];
+
+var newsInterval = 5;
+var newsIntervalCounter = 0;
+
+var weatherInterval = 15;
+var weatherIntervalCounter = 0;
+
+var reloadScreenTimeout;
+var slideErrorTimeout;
+var first = true;
+
 createjs.Sound.registerSound("/assets/sounds/bling.mp3", "counterSound");
+
+$(window).on('load',function(e){
+    hideCursor();
+    player.init();
+    loadScreen();
+});
 
 //Vue instance
 var player = new Vue({
@@ -30,6 +53,9 @@ var player = new Vue({
             setInterval(function(){
                 player.fetchStatus();
             }, 10000);
+            setInterval(function () {
+                player.ping();
+            }, 5000);
         },
         fetchConfig: function() {
             $.get( "/config", function(config) {
@@ -79,12 +105,11 @@ var player = new Vue({
         loadScreen: function () {
             $('#loading').show();
             $('#offline').hide();
-            $('#view').attr('src','/screen');
         },
         showScreen: function() {
             setTimeout(function(){
                 $('#loading').fadeOut('fast');
-            }, 10);
+            }, 500);
         },
         hideScreen: function() {
             $('#loading').show();
@@ -186,11 +211,153 @@ var player = new Vue({
     }
 });
 
-$(window).on('load',function(e){
-    player.init();
-    hideCursor();
-});
+function loadScreen() {
+    
+    $.get( "/screendata", function(response) {
 
+    },'json')
+    .done(function(response) {
+
+        if(response == 'error') {
+            retryLoadScreen();
+        } else {
+            if(screenData){
+                first = false;
+            }
+            screenData = response;
+            if(first){
+                startShow();
+            }
+
+        }
+    })
+    .fail(function() {
+        retryLoadScreen();
+    })
+    player.showScreen();
+}
+
+function retryLoadScreen() {
+    //Try again in 5 seconds
+    clearTimeout(reloadScreenTimeout);
+    reloadScreenTimeout = setTimeout(function(){
+        loadScreen();
+    }, 10000);
+}
+
+function startShow() {
+    $('iframe').remove();
+    if(screenData.playlist.length > 0) {
+        loadSlide(0);
+    }
+}
+
+function loadSlide(index) {
+
+    //Start screen, hide loading in parent
+
+    var url;
+    var uid;
+
+    if(index == 'news') {
+        uid = 'news-' + Math.floor((Math.random() * 1000) + 1);
+        url = 'http://xscreen.io/live/news?uid=' + uid;
+    }
+
+    if(index == 'weather') {
+        uid = 'weather-' + Math.floor((Math.random() * 1000) + 1);
+        url = 'http://xscreen.io/live/weather?uid=' + uid;
+    }
+
+    if(typeof screenData.playlist[index] !== 'undefined') {
+        uid = index+'-'+screenData.playlist[index].uid;
+        type = screenData.playlist[index].type;
+        url = '/slide/' + screenData.playlist[index].uid + '?uid=' + uid;
+    }
+
+    if(url && uid) {
+
+        //Create new iframe
+        slideErrorTimeout = setTimeout(function(){
+            clearTimeout(slideErrorTimeout);
+            screenData = null;
+            loadScreen();
+        }, 25000);
+
+        var slide = document.createElement('iframe');
+        slide.setAttribute('id', uid);
+        slide.setAttribute('class', 'slide_frame');
+        slide.src = url;
+        slide.width = screenData.screen.width;
+        slide.height = screenData.screen.height;
+        slide.style.display = 'none';
+        document.body.appendChild(slide);
+        slide.onload = function(){
+            slide.style.display = 'block';
+            clearRemoveSlides();
+        };
+    } else {
+        //Slides does not exist, reload
+        retryLoadScreen();
+    }
+}
+
+function clearSlideErrorTimeout() {
+    clearTimeout(slideErrorTimeout);
+}
+
+function slideEnd(uid) {
+    removeSlides.push(uid);
+    nextSlide();
+}
+
+function nextSlide() {
+
+    if(parent.player.status.online){
+        //Check if news is required
+        if(screenData.news && newsIntervalCounter == newsInterval){
+            loadSlide('news');
+            newsIntervalCounter = 0;
+            return;
+        }
+
+        //Check if weather is required
+        if(screenData.weather && weatherIntervalCounter == weatherInterval){
+            loadSlide('weather');
+            weatherIntervalCounter = 0;
+            return;
+        }
+    }
+
+    newsIntervalCounter++;
+    weatherIntervalCounter++;
+
+    if(typeof screenData.playlist[currentSlide+1] !== 'undefined') {
+        currentSlide++;
+    } else {
+        currentSlide = 0;
+        loadScreen();
+    }
+    loadSlide(currentSlide);
+}
+
+function clearRemoveSlides() {
+    if(removeSlides.length > 0){
+        for(i=0;i<removeSlides.length;i++){
+            var element = document.getElementById(removeSlides[i]);
+            if(element) {
+                var i = element.parentNode;
+                if(i) {
+                    i.removeChild(element);
+                }
+                element = null;
+            }
+        }
+    }
+    removeSlides = [];
+}
+
+//Key listeners
 document.addEventListener('keyup', receiveKeys, false);
 
 function receiveKeys(e) {
@@ -202,6 +369,7 @@ function receiveKeys(e) {
     player.setCounter(key);
 }
 
+//Hide cursor
 var cursorInterval;
 
 cursorInterval = setInterval(function(){
@@ -212,8 +380,3 @@ function hideCursor() {
     $('body').css('cursor', 'none');
     $('html').css('cursor', 'none');
 }
-
-var handInterval;
-handInterval = setInterval(function(){
-    $('.print-hand').toggleClass('show');
-}, 3000);

@@ -75,6 +75,14 @@ body, html {
     }
 }
 
+.slide_frame {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+    border: none;
+}
+
 #view {
     width: 100%;
     height: 100%;
