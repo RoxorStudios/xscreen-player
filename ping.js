@@ -51,7 +51,6 @@ function sync() {
     .end(function (response) {
         if(response.statusType == 2 && isJson(response.body)) {
             response = JSON.parse(response.body);
-            console.log(response);
             if(parseInt(response.reboot)) {
                 runReboot();
             }
@@ -72,7 +71,6 @@ function restartSync() {
 
 
 function runUpdate() {
-    console.log('start');
     download('https://github.com/RoxorStudios/xscreen-player/archive/master.zip',path.join(__dirname+'/install'),{
         extract: true
     }).then(data => {

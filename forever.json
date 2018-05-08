@@ -4,6 +4,7 @@
         "watch": true,
         "script": "playerService.js",
         "sourceDir": "/var/xscreen-player/install/services",
+        "logFile": "/root/.forever/player.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     },
@@ -12,6 +13,7 @@
         "watch": true,
         "script": "syncService.js",
         "sourceDir": "/var/xscreen-player/install/services",
+        "logFile": "/root/.forever/sync.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     },
@@ -20,6 +22,7 @@
         "watch": true,
         "script": "socketService.js",
         "sourceDir": "/var/xscreen-player/install/services",
+        "logFile": "/root/.forever/socket.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     },
@@ -28,6 +31,7 @@
         "watch": true,
         "script": "ping.js",
         "sourceDir": "/var/xscreen-player",
+        "logFile": "/root/.forever/ping.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     }
