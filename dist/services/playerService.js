@@ -2,8 +2,8 @@ const express       = require('express')
 const app           = express()
 const path          = require("path");
 const isReachable   = require('is-reachable');
-const escpos        = require('escpos');
 const jsonfile      = require('jsonfile')
+const Raven         = require('raven');
 
 require('dotenv').config({
     path: path.join(__dirname+'/../../.env')
@@ -14,7 +14,13 @@ var screenPath      = path.join(__dirname+'/../../public/screen/');
 var counter         = 1;
 var printCounter    = 0;
 
+//Init Sentry
+Raven.config('https://b774cabf2ed04b67a8d8c3f977b4dd8c@sentry.io/1285635',{
+    name: process.env.DISPLAY_KEY
+}).install();
+
 if(process.env.PRINT) {
+    const escpos  = require('escpos');
     const device  = new escpos.Network(process.env.PRINT);
     const printer = new escpos.Printer(device);
 }
@@ -84,6 +90,7 @@ app.get('/slide/:uid', function (req, res) {
 app.get('/screendata', function(req,res) {
     jsonfile.readFile(screenPath+'screendata.json', function(err, json) {
         if(err){
+            console.log('Error reading screendata');
             res.sendStatus(404)
         } else {
             res.setHeader('Content-Type', 'application/json')

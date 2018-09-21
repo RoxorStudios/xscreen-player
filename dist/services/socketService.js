@@ -1,4 +1,5 @@
 var io = require('socket.io')(3000);
+const Raven         = require('raven');
 
 io.on('connection', function (socket) {
 

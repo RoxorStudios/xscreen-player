@@ -58,7 +58,10 @@ var player = new Vue({
             }, 5000);
         },
         fetchConfig: function() {
-            $.get( "/config", function(config) {
+            $.get({
+                url: "/config",
+                cache: false
+            }, function(config) {
 
             },'json')
             .done(function(config) {
@@ -71,22 +74,41 @@ var player = new Vue({
                 
                 document.domain = config.domain;
 
+                //Socket connections
                 if(typeof io !== 'undefined'){
                     socket = io(player.config.socket);
 
                     socket.on('setcounter', function (count) {
                         player.updateCounter(count);
                     });
-
                 }
+
+                //Sentry
+                Sentry.init({
+                    dsn: 'https://b774cabf2ed04b67a8d8c3f977b4dd8c@sentry.io/1285635',
+                    release: true,
+                    serverName: player.config.displayKey
+                });
+                Sentry.configureScope((scope) => {
+                    scope.setUser({
+                        "id": player.config.displayKey,
+                        "username": player.config.displayKey
+                    });
+                });
+
+                //Load screen
                 player.loadScreen();
             })
             .fail(function() {
-                console.log('configuration error');
+                console.log('Error loading configuration');
+                Sentry.captureMessage('Error loading configuration');
             })
         },
         fetchStatus: function() {
-            $.get( "/status", function(status) {
+            $.get({
+                url: "/status",
+                cashe: false
+            }, function(status) {
 
             },'json')
             .done(function(status) {
@@ -99,7 +121,8 @@ var player = new Vue({
                 player.status = status;
             })
             .fail(function() {
-                console.log('connection error');
+                console.log('Error loading status');
+                Sentry.captureMessage('Error loading status');
             })
         },
         loadScreen: function () {
@@ -212,12 +235,13 @@ var player = new Vue({
 });
 
 function loadScreen() {
-    
-    $.get( "/screendata", function(response) {
+    $.get({
+        url: "/screendata",
+        cache: false
+    }, function(response) {
 
     },'json')
     .done(function(response) {
-
         if(response == 'error') {
             retryLoadScreen();
         } else {
@@ -228,17 +252,19 @@ function loadScreen() {
             if(first){
                 startShow();
             }
-
+            player.showScreen();
         }
     })
     .fail(function() {
+        console.log('Error loading screendata');
+        Sentry.captureMessage('Error loading screendata');
         retryLoadScreen();
     })
-    player.showScreen();
+    
 }
 
 function retryLoadScreen() {
-    //Try again in 5 seconds
+    //Try again in 10 seconds
     clearTimeout(reloadScreenTimeout);
     reloadScreenTimeout = setTimeout(function(){
         loadScreen();
@@ -277,13 +303,14 @@ function loadSlide(index) {
 
     if(url && uid) {
 
-        //Create new iframe
+        //Timeout to load screen again when slide is not starting to play
         slideErrorTimeout = setTimeout(function(){
             clearTimeout(slideErrorTimeout);
             screenData = null;
             loadScreen();
-        }, 25000);
+        }, 10000);
 
+        //Create new iframe
         var slide = document.createElement('iframe');
         slide.setAttribute('id', uid);
         slide.setAttribute('class', 'slide_frame');
@@ -298,6 +325,8 @@ function loadSlide(index) {
         };
     } else {
         //Slides does not exist, reload
+        console.log("Slide does not exist, reload screen");
+        Sentry.captureMessage("Slide does not exist, reload screen");
         retryLoadScreen();
     }
 }

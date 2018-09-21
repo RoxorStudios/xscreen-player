@@ -4,6 +4,7 @@ const fs            = require('fs')
 const https         = require('https')
 const async         = require('async')
 const jsonfile      = require('jsonfile')
+const Raven         = require('raven');
 
 require('dotenv').config({
     path: path.join(__dirname+'/../../.env')
@@ -20,6 +21,11 @@ var syncInterval    = 60; //Seconds
 var media;
 var mediaFiles;
 var syncTimeout;
+
+//Init Sentry
+Raven.config('https://b774cabf2ed04b67a8d8c3f977b4dd8c@sentry.io/1285635',{
+    name: displayKey
+}).install();
 
 function sync() {
 
@@ -38,6 +44,7 @@ function sync() {
             saveScreenData(syncData.screendata);
             downloadMedia(syncData.media);
         } else {
+            console.log('Error calling sync route');
             restartSync();
         }
     });
@@ -52,6 +59,7 @@ function restartSync() {
 function saveScreenData(screenData) {
     jsonfile.writeFile(screenPath+'screendata.json', screenData, function (err) {
         if(err){
+            console.log('Error saving screendata: ' + err);
             console.error(err)
         }
     })
@@ -67,7 +75,6 @@ function downloadMedia(media) {
 
             //Images
             if(parseInt(file.type) == 1 || parseInt(file.type) == 2) {
-
                 if (!fs.existsSync(storagePath+file.media)) {
                     var dest = storagePath + '_' + file.media;
                     var destFile = fs.createWriteStream(dest);
@@ -104,6 +111,7 @@ function downloadMedia(media) {
         }
     }, function(err){
         if(err){
+            console.log('Error downloading media: ' + err);
             console.error(err);
         }
         removeMedia();
@@ -116,6 +124,7 @@ function removeMedia() {
     fs.readdir(storagePath, function(err, dirfiles) {
 
         if(err) {
+            console.log('Error removing media: ' + err);
             console.error(err);
         }
 

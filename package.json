@@ -1,6 +1,6 @@
 {
   "name": "xs_player",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "player.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "nodejs-system-reboot": "0.0.4",
     "process-stats": "^2.0.1",
     "pug": "^2.0.3",
+    "raven": "^2.6.4",
     "recursive-copy": "^2.0.9",
     "socket.io": "^1.7.2",
     "unirest": "^0.5.1"
