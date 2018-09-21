@@ -269,11 +269,12 @@ function loadScreen() {
 }
 
 function retryLoadScreen() {
-    //Try again in 10 seconds
+    //Try again in 5 seconds
+    screenData = null;
     clearTimeout(reloadScreenTimeout);
     reloadScreenTimeout = setTimeout(function(){
         loadScreen();
-    }, 10000);
+    }, 5000);
 }
 
 function startShow() {
