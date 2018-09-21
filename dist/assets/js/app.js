@@ -272,6 +272,7 @@ var player = new Vue({
 });
 
 function loadScreen() {
+    console.log('Loading screen');
     $.get({
         url: "/screendata",
         cache: false
@@ -280,13 +281,17 @@ function loadScreen() {
     },'json')
     .done(function(response) {
         if(response == 'error') {
+            console.log('Error loading screendata');
             retryLoadScreen();
         } else {
             if(screenData){
+                console.log('Not the first time loading screendata');
                 first = false;
             }
             screenData = response;
+            console.log(screenData);
             if(first){
+                console.log('starting show');
                 startShow();
             }
             player.showScreen();
