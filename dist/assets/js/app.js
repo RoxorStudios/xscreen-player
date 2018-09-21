@@ -307,7 +307,8 @@ function retryLoadScreen() {
     screenData = null;
     clearTimeout(reloadScreenTimeout);
     reloadScreenTimeout = setTimeout(function(){
-        loadScreen();
+        //loadScreen();
+        player.reloadScreen();
     }, 5000);
 }
 
