@@ -305,9 +305,10 @@ function loadSlide(index) {
 
         //Timeout to load screen again when slide is not starting to play
         slideErrorTimeout = setTimeout(function(){
+            console.log("Slide not playing, load screen");
+            Sentry.captureMessage("Slide not playing, load screen");
             clearTimeout(slideErrorTimeout);
-            screenData = null;
-            loadScreen();
+            retryLoadScreen();
         }, 10000);
 
         //Create new iframe
