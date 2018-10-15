@@ -75,7 +75,7 @@ function downloadMedia(media) {
 
             //Images
             if(parseInt(file.type) == 1 || parseInt(file.type) == 2) {
-                if (!fs.existsSync(storagePath+file.media)) {
+                if(!fs.existsSync(storagePath+file.media)) {
                     var dest = storagePath + '_' + file.media;
                     var destFile = fs.createWriteStream(dest);
                     var request = https.get(file.original, function(response) {
@@ -90,11 +90,15 @@ function downloadMedia(media) {
                                 });
                             });
                         } else {
-                            fs.unlink(dest);
+                            if(fs.existsSync(dest)){
+                                fs.unlink(dest);
+                            }
                             callback('Status problem ' + file.media);
                         }
                     }).on('error', function(err) { // Handle errors
-                        fs.unlink(dest);
+                        if(fs.existsSync(dest)){
+                            fs.unlink(dest);
+                        }
                         callback('Connection error ' + file.media);
                     });
                 } else {
@@ -131,12 +135,14 @@ function removeMedia() {
         dirfiles.forEach(function(file,index) {
             if(file.substring(0, 1) != '_'){
                 //File
-                if(mediaFiles.indexOf(file) == -1 && file != '.gitignore'){
+                if(mediaFiles.indexOf(file) == -1 && file != '.gitignore' && fs.existsSync(storagePath+file)){
                     fs.unlink(storagePath+file);
                 };
             } else {
                 //Temporary file
-                fs.unlink(storagePath+file);
+                if(fs.existsSync(storagePath+file)){
+                    fs.unlink(storagePath+file);
+                }
             }
         });
 
