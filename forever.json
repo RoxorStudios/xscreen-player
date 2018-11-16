@@ -3,7 +3,9 @@
         "append": true,
         "script": "playerService.js",
         "sourceDir": "/var/xscreen-player/install/services",
-        "logFile": "/root/.forever/player.log",
+        "logFile": "/var/log/player.log",
+        "outFile": "/var/log/player_out.log",
+        "errFile": "/var/log/player_err.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     },
@@ -11,7 +13,9 @@
         "append": true,
         "script": "syncService.js",
         "sourceDir": "/var/xscreen-player/install/services",
-        "logFile": "/root/.forever/sync.log",
+        "logFile": "/var/log/sync.log",
+        "outFile": "/var/log/sync_out.log",
+        "errFile": "/var/log/sync_err.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     },
@@ -19,7 +23,9 @@
         "append": true,
         "script": "socketService.js",
         "sourceDir": "/var/xscreen-player/install/services",
-        "logFile": "/root/.forever/socket.log",
+        "logFile": "/var/log/socket.log",
+        "outFile": "/var/log/socket_out.log",
+        "errFile": "/var/log/socket_err.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     },
@@ -27,7 +33,9 @@
         "append": true,
         "script": "ping.js",
         "sourceDir": "/var/xscreen-player",
-        "logFile": "/root/.forever/ping.log",
+        "logFile": "/var/log/ping.log",
+        "outFile": "/var/log/ping_out.log",
+        "errFile": "/var/log/ping_err.log",
         "minUptime" : 5000,
         "spinSleepTime": 1000
     }
