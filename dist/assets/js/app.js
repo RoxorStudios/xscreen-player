@@ -120,25 +120,11 @@ var player = new Vue({
                     });
                 }
 
-                //Sentry
-                Sentry.init({
-                    dsn: 'https://b774cabf2ed04b67a8d8c3f977b4dd8c@sentry.io/1285635',
-                    release: true,
-                    serverName: player.config.displayKey
-                });
-                Sentry.configureScope((scope) => {
-                    scope.setUser({
-                        "id": player.config.displayKey,
-                        "username": player.config.displayKey
-                    });
-                });
-
                 //Load screen
                 player.loadScreen();
             })
             .fail(function() {
                 console.log('Error loading configuration');
-                Sentry.captureMessage('Error loading configuration');
             })
         },
         fetchStatus: function() {
@@ -159,7 +145,6 @@ var player = new Vue({
             })
             .fail(function() {
                 console.log('Error loading status');
-                Sentry.captureMessage('Error loading status');
             })
         },
         loadScreen: function () {
@@ -296,7 +281,6 @@ function loadScreen() {
     })
     .fail(function() {
         console.log('Error loading screendata');
-        Sentry.captureMessage('Error loading screendata');
         retryLoadScreen();
     })
     
@@ -333,7 +317,7 @@ function loadSlide(index) {
 
     if(index == 'weather') {
         uid = 'weather-' + Math.floor((Math.random() * 1000) + 1);
-        url = 'http://xscreen.io/live/weather?uid=' + uid;
+        url = 'http://xscreen.io/live/weather/' + player.config.displayKey + '?uid=' + uid;
     }
 
     if(typeof screenData.playlist[index] !== 'undefined') {
@@ -347,7 +331,6 @@ function loadSlide(index) {
         //Timeout to load screen again when slide is not starting to play
         slideErrorTimeout = setTimeout(function(){
             console.log("Slide not playing, load screen");
-            Sentry.captureMessage("Slide not playing, load screen");
             clearTimeout(slideErrorTimeout);
             retryLoadScreen();
         }, 10000);
@@ -368,7 +351,6 @@ function loadSlide(index) {
     } else {
         //Slides does not exist, reload
         console.log("Slide does not exist, reload screen");
-        Sentry.captureMessage("Slide does not exist, reload screen");
         retryLoadScreen();
     }
 }

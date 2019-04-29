@@ -4,7 +4,6 @@ const fs            = require('fs')
 const https         = require('https')
 const async         = require('async')
 const jsonfile      = require('jsonfile')
-const Raven         = require('raven');
 
 require('dotenv').config({
     path: path.join(__dirname+'/../../.env')
@@ -21,11 +20,6 @@ var syncInterval    = 60; //Seconds
 var media;
 var mediaFiles;
 var syncTimeout;
-
-//Init Sentry
-Raven.config('https://b774cabf2ed04b67a8d8c3f977b4dd8c@sentry.io/1285635',{
-    name: displayKey
-}).install();
 
 function sync() {
 
@@ -91,13 +85,17 @@ function downloadMedia(media) {
                             });
                         } else {
                             if(fs.existsSync(dest)){
-                                fs.unlink(dest);
+                                fs.unlink(dest,function(){
+                                    console.log('Removed temp file ' + file.media)
+                                });
                             }
                             callback('Status problem ' + file.media);
                         }
                     }).on('error', function(err) { // Handle errors
                         if(fs.existsSync(dest)){
-                            fs.unlink(dest);
+                            fs.unlink(dest,function(){
+                                console.log('Removed temp file ' + file.media)
+                            });
                         }
                         callback('Connection error ' + file.media);
                     });
@@ -136,12 +134,16 @@ function removeMedia() {
             if(file.substring(0, 1) != '_'){
                 //File
                 if(mediaFiles.indexOf(file) == -1 && file != '.gitignore' && fs.existsSync(storagePath+file)){
-                    fs.unlink(storagePath+file);
+                    fs.unlink(storagePath+file,function(){
+                        console.log('Removed ' + file)
+                    });
                 };
             } else {
                 //Temporary file
                 if(fs.existsSync(storagePath+file)){
-                    fs.unlink(storagePath+file);
+                    fs.unlink(storagePath+file,function(){
+                        console.log('Removed ' + file)
+                    });
                 }
             }
         });
