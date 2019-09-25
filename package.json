@@ -9,33 +9,33 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.1.4",
+    "async": "^2.6.3",
     "brightness-cli": "^2.3.0",
     "del": "^3.0.0",
     "dotenv": "^4.0.0",
     "download": "^6.2.5",
-    "express": "^4.14.1",
-    "external-ip": "^2.0.3",
+    "express": "^4.17.1",
+    "external-ip": "^2.1.1",
     "gulp": "^3.9.1",
     "internal-ip": "^3.0.1",
     "is-reachable": "^2.4.0",
     "jsonfile": "^4.0.0",
     "keypress": "^0.2.1",
     "nodejs-system-reboot": "0.0.4",
-    "process-stats": "^2.0.1",
-    "pug": "^2.0.3",
+    "process-stats": "^2.0.2",
+    "pug": "^2.0.4",
     "raven": "^2.6.4",
-    "recursive-copy": "^2.0.9",
+    "recursive-copy": "^2.0.10",
     "socket.io": "^1.7.2",
     "unirest": "^0.5.1"
   },
   "devDependencies": {
     "escpos": "2.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "jquery": "^3.1.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^3.2.1",
+    "jquery": "^3.4.1",
     "vinyl-source-stream": "^1.1.0",
-    "vue": "^2.1.10"
+    "vue": "^2.6.10"
   }
 }
