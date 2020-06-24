@@ -41,7 +41,7 @@ app.get('/config', function (req, res) {
         domain: 'xscreen.io',
         live: 'http://xscreen.io/live/',
         contentPath: process.env.CONTENT_PATH,
-        socket: 'http://local.xscreen.io:3000/',
+        socket: process.env.SOCKET,
         displayKey : process.env.DISPLAY_KEY,
         print:  printable,
         counter: counter,
