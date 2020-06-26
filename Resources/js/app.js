@@ -360,13 +360,18 @@ function nextSlide() {
 function clearRemoveSlides() {
     if(removeSlides.length > 0){
         for(i=0;i<removeSlides.length;i++){
-            var element = document.getElementById(removeSlides[i]);
-            if(element) {
-                var i = element.parentNode;
-                if(i) {
-                    i.removeChild(element);
+            var iframe = document.getElementById(removeSlides[i]);
+            if(iframe) {
+                iframe.src = "about:blank";
+                try { 
+                    iframe.contentWindow.document.write(''); 
+                    iframe.contentWindow.document.clear(); 
+                } catch(e) {
+
                 }
-                element = null;
+                var clearTimeout = setTimeout(function(){
+                    iframe.parentNode.removeChild(iframe); 
+                },1000);
             }
         }
     }

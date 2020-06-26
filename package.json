@@ -16,7 +16,7 @@
     "download": "^6.2.5",
     "express": "^4.17.1",
     "external-ip": "^2.1.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "internal-ip": "^3.0.1",
     "is-reachable": "^2.4.0",
     "jsonfile": "^4.0.0",

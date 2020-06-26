@@ -89,7 +89,15 @@ html
                         <div id="object-#{layer.uniqueid}" class="object">#{layer.text}</div>
 
         script
+
+            | var endSlideTimeout = setTimeout(function(){
+            |   parent.slideEnd('#{uid}');
+            | }, #{slide['length']} );
+
             | $('.object').css('pointer-events','none').css('-webkit-user-select', 'none');
+            | $(window).on('beforeunload', function(){
+            |   clearTimeout(endSlideTimeout);
+            | });
             | $(window).ready(function(){
             each animation in slide.animations
                 case animation.type
@@ -149,10 +157,5 @@ html
             |
             |   $.play();
             |   parent.clearSlideErrorTimeout();
-
-
-            |   setTimeout(function(){
-            |       parent.slideEnd('#{uid}');
-            |   }, #{slide['length']} );
 
             | });

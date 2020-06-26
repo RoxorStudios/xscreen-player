@@ -85,7 +85,7 @@ function downloadMedia(media) {
                             });
                         } else {
                             if(fs.existsSync(dest)){
-                                fs.unlink(dest,function(){
+                                fs.unlinkSync(dest,function(){
                                     console.log('Removed temp file ' + file.media)
                                 });
                             }
@@ -93,7 +93,7 @@ function downloadMedia(media) {
                         }
                     }).on('error', function(err) { // Handle errors
                         if(fs.existsSync(dest)){
-                            fs.unlink(dest,function(){
+                            fs.unlinkSync(dest,function(){
                                 console.log('Removed temp file ' + file.media)
                             });
                         }
@@ -134,14 +134,14 @@ function removeMedia() {
             if(file.substring(0, 1) != '_'){
                 //File
                 if(mediaFiles.indexOf(file) == -1 && file != '.gitignore' && fs.existsSync(storagePath+file)){
-                    fs.unlink(storagePath+file,function(){
+                    fs.unlinkSync(storagePath+file,function(){
                         console.log('Removed ' + file)
                     });
                 };
             } else {
                 //Temporary file
                 if(fs.existsSync(storagePath+file)){
-                    fs.unlink(storagePath+file,function(){
+                    fs.unlinkSync(storagePath+file,function(){
                         console.log('Removed ' + file)
                     });
                 }
