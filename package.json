@@ -26,7 +26,7 @@
     "pug": "^2.0.4",
     "raven": "^2.6.4",
     "recursive-copy": "^2.0.10",
-    "socket.io": "^1.7.2",
+    "socket.io": "^4.5.3",
     "unirest": "^0.5.1"
   },
   "devDependencies": {
