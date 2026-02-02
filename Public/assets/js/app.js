@@ -226,7 +226,6 @@ window.addEventListener('message', function(event) {
         if (event.data.type === 'clearSlideErrorTimeout') {
             // Iframe loaded successfully - show it
             player.showScreen();
-            player.ping();
         }
     }
 });
