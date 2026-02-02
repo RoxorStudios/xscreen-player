@@ -13,7 +13,7 @@ var storagePath     = path.join(__dirname+'/../../public/content/');
 var screenPath      = path.join(__dirname+'/../../public/screen/');
 var contentPath     = process.env.CONTENT_PATH;
 var displayKey      = process.env.DISPLAY_KEY;
-var endpoint        = 'http://xscreen.io/live/';
+var endpoint        = 'https://xscreen.io/live/';
 
 var syncInterval    = 60; //Seconds
 

@@ -39,7 +39,7 @@ app.get('/config', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
         domain: 'xscreen.io',
-        live: 'http://xscreen.io/live/',
+        live: 'https://xscreen.io/live/',
         contentPath: process.env.CONTENT_PATH,
         socket: 'http://local.xscreen.io:3000/',
         displayKey : process.env.DISPLAY_KEY,

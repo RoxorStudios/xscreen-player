@@ -14,7 +14,7 @@ require('dotenv').config({
 });
 
 var displayKey      = process.env.DISPLAY_KEY;
-var endpoint        = 'http://xscreen.io/live/';
+var endpoint        = 'https://xscreen.io/live/';
 
 var syncInterval    = 10; //Seconds
 var syncTimeout;

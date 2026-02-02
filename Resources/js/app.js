@@ -275,12 +275,12 @@ function loadSlide(index) {
 
     if(index == 'news') {
         uid = 'news-' + Math.floor((Math.random() * 1000) + 1);
-        url = 'http://xscreen.io/live/news?uid=' + uid;
+        url = 'https://xscreen.io/live/news?uid=' + uid;
     }
 
     if(index == 'weather') {
         uid = 'weather-' + Math.floor((Math.random() * 1000) + 1);
-        url = 'http://xscreen.io/live/weather/' + player.config.displayKey + '?uid=' + uid;
+        url = 'https://xscreen.io/live/weather/' + player.config.displayKey + '?uid=' + uid;
     }
 
     if(typeof screenData.playlist[index] !== 'undefined') {
