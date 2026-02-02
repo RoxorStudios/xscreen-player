@@ -193,7 +193,8 @@ window.addEventListener('message', function(event) {
     // Accept messages from xscreen.io
     if (event.origin.indexOf('xscreen.io') !== -1) {
         if (event.data.type === 'clearSlideErrorTimeout') {
-            // Clear the ping timeout when iframe loads successfully
+            // Iframe loaded successfully - show it
+            player.showScreen();
             player.ping();
         }
     }
