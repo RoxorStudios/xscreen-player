@@ -110,7 +110,7 @@ var player = new Vue({
         loadScreen: function () {
             $('#loading').show();
             $('#offline').hide();
-            document.domain = this.config.domain;
+            // document.domain = this.config.domain;
             $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + '?cdn=' + this.config.contentPath);
         },
         showScreen: function() {
