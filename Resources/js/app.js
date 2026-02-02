@@ -77,8 +77,9 @@ var player = new Vue({
         loadScreen: function () {
             $('#loading').show();
             $('#offline').hide();
-            document.domain = this.config.domain;
-            $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + '?cdn=' + this.config.contentPath);
+            // document.domain = this.config.domain;
+            var cdnParam = this.config.contentPath ? '?cdn=' + this.config.contentPath : '';
+            $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + cdnParam);
         },
         showScreen: function() {
             setTimeout(function(){
