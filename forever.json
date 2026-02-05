@@ -5,7 +5,10 @@
         "script": "playerService.js",
         "sourceDir": "/var/xscreen-player/Services",
         "minUptime" : 5000,
-        "spinSleepTime": 1000
+        "spinSleepTime": 1000,
+        "logFile": "/var/log/xscreen-player.log",
+        "outFile": "/var/log/xscreen-player.out",
+        "errFile": "/var/log/xscreen-player.err"
     },
     {
         "append": true,
