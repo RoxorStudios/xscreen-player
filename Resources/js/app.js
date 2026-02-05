@@ -22,6 +22,7 @@ var player = new Vue({
         count: null,
         counter: 1,
         printCounter: 1,
+        screenLoaded: false,
     },
     methods: {
         init: function() {
@@ -82,6 +83,7 @@ var player = new Vue({
             // document.domain = this.config.domain;
             var cdnParam = this.config.contentPath ? '?cdn=' + this.config.contentPath : '';
             $('#view').attr('src',this.config.live + 'screen/' + this.config.displayKey + cdnParam);
+            this.screenLoaded = true;
         },
         showScreen: function() {
             setTimeout(function(){
@@ -92,10 +94,16 @@ var player = new Vue({
             $('#loading').show();
         },
         goOnline: function (event) {
-            this.loadScreen();
+            if (!this.screenLoaded) {
+                this.loadScreen();
+            } else {
+                $('#loading').hide();
+                $('#offline').hide();
+            }
         },
         goOffline: function (event) {
             $('#offline').fadeIn('fast');
+            this.screenLoaded = false;
         },
         reloadScreen: function () {
             location.reload();
