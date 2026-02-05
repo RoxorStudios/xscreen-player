@@ -186,6 +186,17 @@ var player = new Vue({
     }
 });
 
+// Listen for postMessage events from xscreen.io iframe
+window.addEventListener('message', function(event) {
+    // Accept messages from xscreen.io
+    if (event.origin.indexOf('xscreen.io') !== -1) {
+        if (event.data.type === 'clearSlideErrorTimeout') {
+            // Iframe loaded successfully - show it
+            player.showScreen();
+        }
+    }
+});
+
 $(window).on('load',function(e){
     player.init();
     hideCursor();
