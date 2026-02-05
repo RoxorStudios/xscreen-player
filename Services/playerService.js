@@ -14,10 +14,14 @@ function loadCounters() {
     try {
         if (fs.existsSync(counterFile)) {
             const data = fs.readFileSync(counterFile, 'utf8');
-            return JSON.parse(data);
+            const counters = JSON.parse(data);
+            console.log('[COUNTERS] Loaded from file:', counters);
+            return counters;
+        } else {
+            console.log('[COUNTERS] File does not exist, using defaults');
         }
     } catch (error) {
-        console.error('Error loading counters:', error);
+        console.error('[COUNTERS] Error loading counters:', error);
     }
     return { counter: 1, printCounter: 0 };
 }
@@ -25,9 +29,11 @@ function loadCounters() {
 // Save counters to file
 function saveCounters() {
     try {
-        fs.writeFileSync(counterFile, JSON.stringify({ counter, printCounter }, null, 2));
+        const data = { counter, printCounter };
+        fs.writeFileSync(counterFile, JSON.stringify(data, null, 2));
+        console.log('[COUNTERS] Saved to file:', data);
     } catch (error) {
-        console.error('Error saving counters:', error);
+        console.error('[COUNTERS] Error saving counters:', error);
     }
 }
 
@@ -36,9 +42,15 @@ const counters = loadCounters();
 var counter = counters.counter;
 var printCounter = counters.printCounter;
 
+console.log('[STARTUP] Player service starting...');
+console.log('[STARTUP] Counter initialized to:', counter);
+console.log('[STARTUP] Print counter initialized to:', printCounter);
+console.log('[STARTUP] PRINT configured:', process.env.PRINT || 'NOT SET');
+
 if(process.env.PRINT) {
     const device  = new escpos.Network(process.env.PRINT);
     const printer = new escpos.Printer(device);
+    console.log('[STARTUP] Printer device initialized');
 }
 
 app.use(express.static('../Public'));
@@ -78,7 +90,7 @@ app.get('/status', function (req, res) {
 })
 
 app.listen(process.env.PORT, function () {
-    //Server started
+    console.log('[STARTUP] Server listening on port:', process.env.PORT);
 })
 
 app.get('/setcounter', function (req, res, data) {
@@ -97,17 +109,21 @@ app.get('/setcounter', function (req, res, data) {
 
 app.get('/print', function (req, res) {
 
+    console.log('[ENDPOINT] /print called');
+
     printCounter++;
     printCounter = printCounter > 99 ? 1 : printCounter;
 
     var realNumber = printCounter;
 
+    console.log('[ENDPOINT] Counter incremented to:', realNumber);
     saveCounters();
 
     if(process.env.PRINT) {
+        console.log('[ENDPOINT] PRINT configured, calling print()');
         print();
     } else {
-        console.log('Print not configured - skipping physical print');
+        console.log('[ENDPOINT] PRINT not configured - skipping physical print');
     }
 
     res.setHeader('Content-Type', 'application/json');
@@ -120,34 +136,62 @@ app.get('/print', function (req, res) {
 
 function print() {
 
+    console.log('[PRINT] Function called for counter:', printCounter);
+
     try {
+        console.log('[PRINT] Connecting to printer at:', process.env.PRINT);
         var device  = new escpos.Network(process.env.PRINT);
         var printer = new escpos.Printer(device);
         var realNumber = printCounter;
 
-        var logo = escpos.Image.load(__dirname+'/../Public/client/logo.png', function(logo){
+        var logoPath = __dirname+'/../Public/client/logo.png';
+        console.log('[PRINT] Loading logo from:', logoPath);
 
-            var number = escpos.Image.load(__dirname+'/../Public/assets/images/numbers/'+realNumber+'.png', function(number){
+        var logo = escpos.Image.load(logoPath, function(logo, logoError){
+            if(logoError) {
+                console.error('[PRINT] Logo load error:', logoError);
+                return;
+            }
+            console.log('[PRINT] Logo loaded successfully');
+
+            var numberPath = __dirname+'/../Public/assets/images/numbers/'+realNumber+'.png';
+            console.log('[PRINT] Loading number image from:', numberPath);
+
+            var number = escpos.Image.load(numberPath, function(number, numberError){
+                if(numberError) {
+                    console.error('[PRINT] Number image load error:', numberError);
+                    return;
+                }
+                console.log('[PRINT] Number image loaded successfully');
+                console.log('[PRINT] Opening device connection...');
+
                 device.open(function(error){
                     if(error) {
-                        console.error('Printer connection error:', error);
+                        console.error('[PRINT] Printer connection error:', error);
                         return;
                     }
-                    printer
-                    .align('ct')
-                    .image(logo, 'd24')
-                    .feed(1)
-                    .image(number, 'd24')
-                    .feed(1)
-                    .text(getTicketMessage())
-                    .feed(2)
-                    .cut('partial')
-                    .close();
+                    console.log('[PRINT] Device opened, sending print job...');
+
+                    try {
+                        printer
+                        .align('ct')
+                        .image(logo, 'd24')
+                        .feed(1)
+                        .image(number, 'd24')
+                        .feed(1)
+                        .text(getTicketMessage())
+                        .feed(2)
+                        .cut('partial')
+                        .close();
+                        console.log('[PRINT] Print job sent successfully');
+                    } catch(printError) {
+                        console.error('[PRINT] Error sending print job:', printError);
+                    }
                 });
             });
         });
     } catch(error) {
-        console.error('Print function error:', error);
+        console.error('[PRINT] Print function error:', error);
     }
 }
 
