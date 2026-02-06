@@ -173,16 +173,33 @@ function print() {
                     console.log('[PRINT] Device opened, sending print job...');
 
                     try {
-                        printer
-                        .align('ct')
-                        .image(logo, 'd24')
-                        .feed(1)
-                        .image(number, 'd24')
-                        .feed(1)
-                        .text(getTicketMessage())
-                        .feed(2)
-                        .cut('partial')
-                        .close();
+                        // Align center
+                        printer.align('ct');
+
+                        // Print logo image
+                        printer.image(logo, 'd24');
+
+                        // Feed line
+                        printer.feed(1);
+
+                        // Print number image
+                        printer.image(number, 'd24');
+
+                        // Feed line
+                        printer.feed(1);
+
+                        // Print message text
+                        printer.text(getTicketMessage());
+
+                        // Feed 2 lines
+                        printer.feed(2);
+
+                        // Cut paper
+                        printer.cut('partial');
+
+                        // Close connection
+                        printer.close();
+
                         console.log('[PRINT] Print job sent successfully');
                     } catch(printError) {
                         console.error('[PRINT] Error sending print job:', printError);
