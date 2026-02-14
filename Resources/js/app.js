@@ -1,4 +1,4 @@
-document.domain = 'xscreen.io';
+// document.domain = 'xscreen.io';
 
 //Socket
 var socket = null;
@@ -71,8 +71,8 @@ var player = new Vue({
                 player.count = player.config.count;
                 player.counter = player.config.counter;
                 player.printCounter = player.config.printCounter;
-                
-                document.domain = config.domain;
+
+                // document.domain = config.domain;
 
                 //Socket connections
                 if(typeof io !== 'undefined'){
@@ -246,7 +246,7 @@ function loadScreen() {
         console.log('Error loading screendata');
         retryLoadScreen();
     })
-    
+
 }
 
 function retryLoadScreen() {
@@ -363,14 +363,14 @@ function clearRemoveSlides() {
             var iframe = document.getElementById(removeSlides[i]);
             if(iframe) {
                 iframe.src = "about:blank";
-                try { 
-                    iframe.contentWindow.document.write(''); 
-                    iframe.contentWindow.document.clear(); 
+                try {
+                    iframe.contentWindow.document.write('');
+                    iframe.contentWindow.document.clear();
                 } catch(e) {
 
                 }
                 var clearTimeout = setTimeout(function(){
-                    iframe.parentNode.removeChild(iframe); 
+                    iframe.parentNode.removeChild(iframe);
                 },1000);
             }
         }

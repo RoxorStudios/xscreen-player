@@ -8,7 +8,7 @@ html
         each font in slide.fonts
             style.
                 @import url('https://fonts.googleapis.com/css?family=#{font.google_embed}');
-        
+
         style.
             .object {
                 display: block;
@@ -57,7 +57,7 @@ html
                                 | -moz-transform: rotate(#{layer.rotation}deg) scale(0);
                                 | -o-transform: rotate(#{layer.rotation}deg) scale(0);
                                 | -ms-transform: rotate(#{layer.rotation}deg) scale(0);
-                
+
                 case layer.type
                     when '3'
                         | color: ##{layer.color};
@@ -72,10 +72,6 @@ html
                             | width: #{layer.width}px;
 
                 |}
-
-        script.
-    
-            document.domain = 'xscreen.io'
 
     body
 
@@ -126,7 +122,7 @@ html
                                     var css_property = 'transform'
                                     var start = 'scale(' + animation.start + ') rotate(' + animation.rotation + 'deg)'
                                     var stop = 'scale(' + animation.stop + ') rotate(' + animation.rotation + 'deg)'
-                        
+
                         |   $('#object-#{animation.layer_uid}').tween({
                         |       #{css_property}:{
                         |           start: '#{start}',
