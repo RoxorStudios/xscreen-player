@@ -32,6 +32,20 @@ $(window).on('load',function(e){
     loadScreen();
 });
 
+// Handle postMessage from slide iframes
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type) {
+        switch(event.data.type) {
+            case 'clearSlideError':
+                clearSlideErrorTimeout();
+                break;
+            case 'slideEnd':
+                slideEnd(event.data.uid);
+                break;
+        }
+    }
+});
+
 //Vue instance
 var player = new Vue({
     el: '#player',
@@ -292,11 +306,11 @@ function loadSlide(index) {
     if(url && uid) {
 
         //Timeout to load screen again when slide is not starting to play
-        // slideErrorTimeout = setTimeout(function(){
-        //     console.log("Slide not playing, load screen");
-        //     clearTimeout(slideErrorTimeout);
-        //     retryLoadScreen();
-        // }, 10000);
+        slideErrorTimeout = setTimeout(function(){
+            console.log("Slide not playing, load screen");
+            clearTimeout(slideErrorTimeout);
+            retryLoadScreen();
+        }, 10000);
 
         //Create new iframe
         var slide = document.createElement('iframe');

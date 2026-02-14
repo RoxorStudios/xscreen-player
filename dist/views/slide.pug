@@ -87,7 +87,7 @@ html
         script
 
             | var endSlideTimeout = setTimeout(function(){
-            |   parent.slideEnd('#{uid}');
+            |   parent.postMessage({type: 'slideEnd', uid: '#{uid}'}, '*');
             | }, #{slide['length']} );
 
             | $('.object').css('pointer-events','none').css('-webkit-user-select', 'none');
@@ -152,6 +152,6 @@ html
                         |   });
             |
             |   $.play();
-            |   parent.clearSlideErrorTimeout();
+            |   parent.postMessage({type: 'clearSlideError'}, '*');
 
             | });

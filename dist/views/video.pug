@@ -20,15 +20,15 @@ html
 
         script.
             $(window).on('load',function(e){
-                parent.clearSlideErrorTimeout();
+                parent.postMessage({type: 'clearSlideError'}, '*');
             });
 
             var v = document.getElementsByTagName("video")[0];
             v.volume = 1;
 
             v.addEventListener('ended', function() {
-                parent.slideEnd('#{uid}');
+                parent.postMessage({type: 'slideEnd', uid: '#{uid}'}, '*');
             }, true);
             v.addEventListener('error', function() {
-                parent.slideEnd('#{uid}');
+                parent.postMessage({type: 'slideEnd', uid: '#{uid}'}, '*');
             }, true);
