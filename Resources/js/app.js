@@ -286,7 +286,7 @@ function loadSlide(index) {
     if(typeof screenData.playlist[index] !== 'undefined') {
         uid = index+'-'+screenData.playlist[index].uid;
         type = screenData.playlist[index].type;
-        url = '/slide/' + screenData.playlist[index].uid + '?uid=' + uid;
+        url = 'https://xscreen.io/live/slide/' + screenData.playlist[index].uid + '?uid=' + uid;
     }
 
     if(url && uid) {
