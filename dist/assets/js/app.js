@@ -343,11 +343,11 @@ function loadSlide(index) {
     if(url && uid) {
 
         //Timeout to load screen again when slide is not starting to play
-        slideErrorTimeout = setTimeout(function(){
-            console.log("Slide not playing, load screen");
-            clearTimeout(slideErrorTimeout);
-            retryLoadScreen();
-        }, 10000);
+        // slideErrorTimeout = setTimeout(function(){
+        //     console.log("Slide not playing, load screen");
+        //     clearTimeout(slideErrorTimeout);
+        //     retryLoadScreen();
+        // }, 10000);
 
         //Create new iframe
         var slide = document.createElement('iframe');
@@ -370,7 +370,7 @@ function loadSlide(index) {
 }
 
 function clearSlideErrorTimeout() {
-    clearTimeout(slideErrorTimeout);
+    // clearTimeout(slideErrorTimeout);
 }
 
 function slideEnd(uid) {
