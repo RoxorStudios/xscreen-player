@@ -23,7 +23,7 @@
     "keypress": "^0.2.1",
     "nodejs-system-reboot": "0.0.4",
     "process-stats": "^2.0.2",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "raven": "^2.6.4",
     "recursive-copy": "^2.0.10",
     "socket.io": "^1.7.2",
